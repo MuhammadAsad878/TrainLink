@@ -1,4 +1,6 @@
-﻿using TrainLink.Dtos;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using TrainLink.Constants;
+using TrainLink.Dtos;
 using TrainLink.Helpers;
 using TrainLink.Repositories.Interfaces;
 using TrainLink.Services.Interfaces;
@@ -15,7 +17,7 @@ namespace TrainLink.Services
             _account = account;
             _config = config;
         }
-
+               
         public async Task<DtoLoginResponse?> ValidateLoginAsync(DtoLogin dto)
         {
             var user = await _account.GetByUsernameAsync(dto.Username);
@@ -27,8 +29,27 @@ namespace TrainLink.Services
             return response;
         }
 
+        public async Task<DtoChangePasswordResponse?> ChangePassword(DtoChangePassword dto)
+        {
+            if (dto is null) return new DtoChangePasswordResponse(null, false, ValidationMessages.InvalidLoginCredentials); ;
+            var user = await _account.GetByUsernameAsync(dto.Username);
+            if (user == null) return new DtoChangePasswordResponse(null,false,ValidationMessages.NotFound);
+            var verified = PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash);
+            if (!verified) return new DtoChangePasswordResponse(null, false, ValidationMessages.InvalidLoginCredentials); ;
+            dto.NewPassword = PasswordHelper.HashPassword(dto.NewPassword);
+            return await _account.UpdatePassword(dto);
 
-       
+        }
+
+        public bool? LogoutUser(string token)
+        {
+            if (token == null) return false;
+            
+            throw new NotImplementedException();
+        }
+
+
+
 
 
     }

@@ -19,16 +19,27 @@ namespace TrainLink.Controllers
         public async Task<IActionResult> Login([FromBody] DtoLogin dtoLogin)
         {
             if (dtoLogin is null) return BadRequest(ValidationMessages.LoginBadRequest);
-
             var response = await _accountService.ValidateLoginAsync(dtoLogin);
-
             if (response is null) return Unauthorized(ValidationMessages.InvalidLoginCredentials);
-            
-           
             return Ok(response);
         }
 
-        
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
+        {
+            if(dto is null ) return BadRequest(ValidationMessages.LoginBadRequest);
+            var response = await _accountService.ChangePassword(dto);
+            if (!response.IsPasswordChanged) return BadRequest(response);
+            return Ok(response);
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout([FromBody] string? token)
+        {
+            if (token is null) return BadRequest(ValidationMessages.LoginFirst);
+
+            return Ok(ValidationMessages.LogoutSuccess);
+        }
 
 
 

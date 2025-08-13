@@ -17,9 +17,17 @@
         public const string PasswordMustHaveLowercase = "Password must contain at least one lowercase letter.";
         public const string PasswordMustHaveDigit = "Password must contain at least one digit.";
         public const string PasswordMustHaveSpecialChar = "Password must contain at least one special character.";
+        public const string PasswordNotSame = "Both Old and New Passwords are same";
 
         // Authentication / Login
         public const string InvalidLoginCredentials = "Invalid username or password.";
-        public const string LoginBadRequest = "Invalid login data.";
+        public const string LoginBadRequest = "Please Enter Complete Data.";
+        public const string NotFound = "Not Found";
+        public const string LoginFirst = "Login First";
+        public const string LogoutSuccess = "Logout Successfully!";
+
+        // Password Change
+        public const string PasswordChangeSuccess = "Password Changed Successfully!";
+        public const string PasswordChangeFailed = "Password Not Changed!";
     }
 }

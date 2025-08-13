@@ -22,6 +22,7 @@ builder.Services.AddSwaggerGen();
 // FluentValidation setup
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<DtoLogin>, ValidatorLogin>();
+builder.Services.AddScoped<IValidator<DtoChangePassword>, ValidatorChangePassword>();
 // Register services and repositories
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
