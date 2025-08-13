@@ -27,6 +27,7 @@ namespace TrainLink.Helpers
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds
             );
+
             return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
