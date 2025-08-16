@@ -48,9 +48,9 @@ namespace TrainLink.Services
             throw new NotImplementedException();
         }
 
-
-
-
-
+        void IAccountService.LogoutUser(string token)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

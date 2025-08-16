@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System.Data;
 using TrainLink.Constants;
 using TrainLink.DataAccess;
 using TrainLink.Dtos;
@@ -18,11 +19,16 @@ namespace TrainLink.Repositories
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
-            const string sql = @"SELECT TOP 1 Id, Username, PasswordHash, Name, Mobile, RoleId,
-                                    MembershipExpiry, CreatedAt, UpdatedAt
-                             FROM Users WHERE Username = @Username;";
+
             using var conn = _context.CreateConnection();
-            return await conn.QuerySingleOrDefaultAsync<User>(sql, new { Username = username });
+            var result = await conn.QuerySingleOrDefaultAsync<User>(
+                "GetUserByUsername",
+                new { Username = username },
+                commandType: CommandType.StoredProcedure
+                );
+            if (result is null) return null;           
+            return result;
+
         }
 
         public void LogoutUser(string token)
@@ -32,14 +38,16 @@ namespace TrainLink.Repositories
 
         public async Task<DtoChangePasswordResponse?> UpdatePassword(DtoChangePassword dto)
         {
-            const string sql = @"UPDATE Users SET PasswordHash = @NewPassword WHERE Username= @Username";
             using var conn = _context.CreateConnection();
-            var res =  await conn.ExecuteAsync(sql, new { NewPassword = dto.NewPassword, Username = dto.Username });
-            if (res > 0)
+            var result = await conn.QuerySingleOrDefaultAsync<int>(
+                "UpdatePassword",
+                commandType: CommandType.StoredProcedure,
+                param: new { UserName = dto.Username, NewPassword = dto.NewPassword });
+            if (result > 0)
             {
                 return new DtoChangePasswordResponse(dto.Username, true, ValidationMessages.PasswordChangeSuccess);
             }
-            return new DtoChangePasswordResponse(dto.Username,false,ValidationMessages.PasswordChangeFailed);
+            return new DtoChangePasswordResponse(dto.Username, false, ValidationMessages.PasswordChangeFailed);
         }
     }
 }

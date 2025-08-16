@@ -23,9 +23,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<DtoLogin>, ValidatorLogin>();
 builder.Services.AddScoped<IValidator<DtoChangePassword>, ValidatorChangePassword>();
+builder.Services.AddScoped<IValidator<DtoMeetingSlotCreate>, ValidatorMeetingSlotCreate>();
+builder.Services.AddScoped<IValidator<DtoMeetingSlotUpdate>, ValidatorMeetingSlotUpdate>();
+builder.Services.AddScoped<IValidator<DtoMeetingSlotDelete>, ValidatorMeetingSlotDelete>();
+
 // Register services and repositories
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IMeetingService, MeetingService>();
+builder.Services.AddScoped<IMeetingRepository,MeetingRepository>();
 
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
