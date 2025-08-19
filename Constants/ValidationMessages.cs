@@ -3,23 +3,24 @@
     public static class ValidationMessages
     {
         // Username Messages
-        public const string UsernameRequired = "Username is required.";
-        public static string UsernameLengthShort = $"Username must be at least {ValidationLengths.MinUsername} characters long.";
-        public static string UsernameLengthLong = $"Username must not exceed {ValidationLengths.MaxUsername} characters.";
-        public const string UsernameInvalid = $"Username Must start with letter can only contain letters, numbers, and underscores.";
-        public const string UsernameAlreadyExists = "The username already exists. Please choose a different username.";
+        public const string USERNAME_REQUIRED = "Username is required.";
+        public const string USERNAME_LENGTH_SHORT = "Username must be at least 3 characters long.";
+        public const string USERNAME_LENGTH_LONG = "Username must not exceed 20 characters.";
+        public const string USERNAME_INVALID = "Username must start with a letter and can only contain letters, numbers, and underscores.";
+        public const string USERNAME_ALREADY_EXISTS = "The username already exists. Please choose a different username.";
 
         // Password Messages
-        public const string PasswordRequired = "Password is required.";
-        public static string PasswordTooShort = $"Password must be at least {ValidationLengths.MinPassword} characters long.";
-        public static string PasswordTooLong = $"Password cannot be longer than {ValidationLengths.MaxPassword} characters.";
-        public const string PasswordMustHaveUppercase = "Password must contain at least one uppercase letter.";
-        public const string PasswordMustHaveLowercase = "Password must contain at least one lowercase letter.";
-        public const string PasswordMustHaveDigit = "Password must contain at least one digit.";
-        public const string PasswordMustHaveSpecialChar = "Password must contain at least one special character.";
+        public const string PASSWORD_REQUIRED = "Password is required.";
+        public const string PASSWORD_TOO_SHORT = "Password must be at least 6 characters long.";
+        public const string PASSWORD_TOO_LONG = "Password cannot be longer than 50 characters.";
+        public const string PASSWORD_MUST_HAVE_UPPERCASE = "Password must contain at least one uppercase letter.";
+        public const string PASSWORD_MUST_HAVE_LOWERCASE = "Password must contain at least one lowercase letter.";
+        public const string PASSWORD_MUST_HAVE_DIGIT = "Password must contain at least one digit.";
+        public const string PASSWORD_MUST_HAVE_SPECIAL_CHAR = "Password must contain at least one special character.";
+        public const string PASSWORD_INVALID = "Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.";
 
         // Authentication / Login
-        public const string InvalidLoginCredentials = "Invalid username or password.";
-        public const string LoginBadRequest = "Invalid login data.";
+        public const string INVALID_LOGIN_CREDENTIALS = "Invalid username or password.";
+        public const string LOGIN_BAD_REQUEST = "Invalid login data.";
     }
 }
