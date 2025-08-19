@@ -2,11 +2,13 @@
 using TrainLink.Dtos;
 using TrainLink.Constants;
 using TrainLink.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TrainLink.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -15,30 +17,31 @@ namespace TrainLink.Controllers
             _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
         }
 
-        [HttpPost("login")]
+        [HttpPost(ApiRoutes.LOGIN)]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] DtoLogin dtoLogin)
         {
-            if (dtoLogin is null) return BadRequest(ValidationMessages.LoginBadRequest);
+            if (dtoLogin is null) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ValidateLoginAsync(dtoLogin);
-            if (response is null) return Unauthorized(ValidationMessages.InvalidLoginCredentials);
+            if (response is null) return Unauthorized(ValidationMessages.INVALID_LOGIN_CREDENTIALS);
             return Ok(response);
         }
 
-        [HttpPost("change-password")]
+        [HttpPost(ApiRoutes.CHANGE_PASSWORD)]
         public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
         {
-            if(dto is null ) return BadRequest(ValidationMessages.LoginBadRequest);
+            if(dto is null ) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ChangePassword(dto);
-            if (!response.IsPasswordChanged) return BadRequest(response);
+            if (response != null && !response.IsPasswordChanged) return BadRequest(response);
             return Ok(response);
         }
 
-        [HttpPost("logout")]
+        [HttpPost(ApiRoutes.LOGOUT)]
         public IActionResult Logout([FromBody] string? token)
         {
-            if (token is null) return BadRequest(ValidationMessages.LoginFirst);
+            if (token is null) return BadRequest(ValidationMessages.LOGIN_FIRST);
 
-            return Ok(ValidationMessages.LogoutSuccess);
+            return Ok(ValidationMessages.LOGOUT_SUCCESS);
         }
 
 

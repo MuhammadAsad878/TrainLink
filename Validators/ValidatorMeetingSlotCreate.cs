@@ -7,17 +7,13 @@ namespace TrainLink.Dtos
     {
         public ValidatorMeetingSlotCreate()
         {
-            RuleFor(x => x.SlotDate)
+            RuleFor(x => x.SlotTime)
                 .NotEmpty()
-                .WithMessage(ValidationMessages.MeetingSlotDateRequired)
-                .GreaterThan(DateTime.UtcNow)
-                .WithMessage(ValidationMessages.MeetingSlotDateFuture);
+                .WithMessage(ValidationMessages.SLOT_TIME_REQUIRED);
 
-            RuleFor(x => x.CreatedBy)
-                .NotEmpty()
-                .WithMessage(ValidationMessages.CreatedByRequired)
-                .MaximumLength(ValidationLengths.CreatedByMaxLength)
-                .WithMessage($"{ValidationMessages.MaxLengthExceeded} (Max {ValidationLengths.CreatedByMaxLength} characters)");
+            RuleFor(x => x.SlotTime)
+                  .Must(x => TimeOnly.TryParse(x, out var time))
+                  .WithMessage(ValidationMessages.SLOT_TIME_MUST_BE);
         }
     }
 }

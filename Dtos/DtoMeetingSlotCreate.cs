@@ -2,7 +2,6 @@
 {
     public class DtoMeetingSlotCreate
     {
-        public DateTime SlotDate { get; set; }
-        public string CreatedBy { get; set; } = string.Empty;
+        public string SlotTime { get; set; } = string.Empty;
     }
 }

@@ -19,7 +19,6 @@ namespace TrainLink.Repositories
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
-
             using var conn = _context.CreateConnection();
             var result = await conn.QuerySingleOrDefaultAsync<User>(
                 "GetUserByUsername",
@@ -28,7 +27,6 @@ namespace TrainLink.Repositories
                 );
             if (result is null) return null;           
             return result;
-
         }
 
         public void LogoutUser(string token)
@@ -45,9 +43,9 @@ namespace TrainLink.Repositories
                 param: new { UserName = dto.Username, NewPassword = dto.NewPassword });
             if (result > 0)
             {
-                return new DtoChangePasswordResponse(dto.Username, true, ValidationMessages.PasswordChangeSuccess);
+                return new DtoChangePasswordResponse(dto.Username, true, ValidationMessages.PASSWORD_CHANGE_SUCCESS);
             }
-            return new DtoChangePasswordResponse(dto.Username, false, ValidationMessages.PasswordChangeFailed);
+            return new DtoChangePasswordResponse(dto.Username, false, ValidationMessages.PASSWORD_CHANGE_FAILED);
         }
     }
 }

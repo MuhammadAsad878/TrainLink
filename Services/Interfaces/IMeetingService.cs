@@ -1,4 +1,5 @@
 ﻿using TrainLink.Dtos;
+using TrainLink.Entities;
 using TrainLink.Models;
 
 namespace TrainLink.Services.Interfaces
@@ -6,8 +7,8 @@ namespace TrainLink.Services.Interfaces
     public interface IMeetingService
     {
         Task<List<DtoMeetingSlotResponse?>> GetMeetingSlotsAsync(int? id);
-        Task<DtoMeetingSlotResponse?> CreateMeetingSlotAsync(DtoMeetingSlotCreate meetingSlot);
-        Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(DtoMeetingSlotUpdate meetingSlot);
-        Task<bool?> DeleteMeetingSlotAsync(DtoMeetingSlotDelete deleteSlot);
+        Task<DtoMeetingSlotResponse?> CreateMeetingSlotAsync(EntityMeetingSlot SlotTime);
+        Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(EntityMeetingSlot UpdateMeetingSlot);
+        Task<bool?> DeleteMeetingSlotAsync(EntityMeetingSlot deleteSlot);
     }
 }

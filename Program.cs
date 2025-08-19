@@ -10,6 +10,7 @@ using TrainLink.Services.Interfaces;
 using FluentValidation;
 using TrainLink.Dtos;
 using TrainLink.Validators;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +48,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+                    Encoding.UTF8.GetBytes(jwtSettings["Key"])),
+            NameClaimType = ClaimTypes.Name
         };
     });
 

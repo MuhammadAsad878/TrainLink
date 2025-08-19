@@ -17,6 +17,7 @@ namespace TrainLink.Helpers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim("roleId", user.RoleId.ToString()),
+                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

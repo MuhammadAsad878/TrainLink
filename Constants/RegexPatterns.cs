@@ -1,15 +1,15 @@
 ﻿namespace TrainLink.Constants
 {
-    public class RegexPatterns
+    public static class RegexPatterns
     {
-        public static string PasswordPattern = $@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{{{ValidationLengths.MinPassword},}}$";
-        public const string EmailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$"; 
-        public const string PhoneNumberPattern = @"^\+?[1-9]\d{1,14}$";
-        public static string UsernamePattern =  $@"^[a-zA-Z][a-zA-Z0-9_]{{{ValidationLengths.MinUsername-1},{ValidationLengths.MaxUsername-1}}}$";
+        public static string PASSWORD_PATTERN = $@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{{{ValidationLengths.PASSWORD_MIN_LENGTH},}}$";
+        public const string EMAIL_PATTERN = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        public const string PHONE_NUMBER_PATTERN = @"^\+?[1-9]\d{1,14}$";
+        public static string USERNAME_PATTERN = $@"^[a-zA-Z][a-zA-Z0-9_]{{{ValidationLengths.USERNAME_MIN_LENGTH-1},{ValidationLengths.USERNAME_MAX_LENGTH-1}}}$";
 
-        public const string PasswordUppercase = @"[A-Z]";
-        public const string PasswordLowercase = @"[a-z]";
-        public const string PasswordDigit = @"\d";
-        public const string PasswordSpecialChar = @"[@$!%*?&]";
+        public const string PASSWORD_UPPERCASE = @"[A-Z]";
+        public const string PASSWORD_LOWERCASE = @"[a-z]";
+        public const string PASSWORD_DIGIT = @"\d";
+        public const string PASSWORD_SPECIAL_CHAR = @"[@$!%*?&]";
     }
 }
