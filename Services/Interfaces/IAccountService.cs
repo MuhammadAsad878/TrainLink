@@ -5,6 +5,6 @@ namespace TrainLink.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<DtoLoginResponse?> ValidateLoginAsync(DtoLogin dtoLogin);
+        Task<LoginResponse?> ValidateLoginAsync(LoginRequest dtoLogin);
     }
 }
