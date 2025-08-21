@@ -15,28 +15,15 @@ namespace TrainLink.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _service;
-        private readonly IMeetingRepository _repository;
-        public MeetingController(IMeetingService service,IMeetingRepository repository)
+        public MeetingController(IMeetingService service)
         {
             _service = service;
-            _repository = repository;
         }
+
 
         [HttpGet(ApiRoutes.GET_SLOTS)]
-        public async Task<IActionResult> GetMeetingSlots()
-        {
-            var result = await _service.GetMeetingSlotsAsync(null);
-            if (result == null || result.Count == 0)
-            {
-                return NotFound(ValidationMessages.MEETING_SLOT_NOT_FOUND);
-            }
-            return Ok(result);
-        }
-        
-
-        [HttpGet(ApiRoutes.GET_SLOT_BY_ID)]
-        public async Task<IActionResult> GetMeetingSlotsById([FromRoute] int? id)
-        {
+        public async Task<IActionResult> GetMeetingSlots([FromRoute] int? id)
+        {          
             var result = await _service.GetMeetingSlotsAsync(id);
             if (result == null || result.Count == 0)
                 return NotFound(ValidationMessages.MEETING_SLOT_NOT_FOUND);
@@ -86,11 +73,7 @@ namespace TrainLink.Controllers
             if (result == true) return Ok(ValidationMessages.MEETING_SLOT_DELETED_SUCCESSFULLY);
             return StatusCode(StatusCodes.Status500InternalServerError,
             ValidationMessages.FAILED_TO_DELETE_MEETING_SLOT);
-
-
         }
-
-
 
     }
 }

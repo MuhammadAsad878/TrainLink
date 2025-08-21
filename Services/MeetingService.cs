@@ -30,12 +30,12 @@ namespace TrainLink.Services
             if (validate == null || validate.IsActive == 0) return null;
             var result = await _meetingRepository.DeleteMeetingSlotAsync(delSlot);
             return result;
-
         }
 
-        public async Task<List<DtoMeetingSlotResponse?>> GetMeetingSlotsAsync(int? id)
+        public async Task<List<DtoMeetingSlotResponse>> GetMeetingSlotsAsync(int? id)
         {
-           var result = await _meetingRepository.GetMeetingSlotsAsync(id);          
+           var result = await _meetingRepository.GetMeetingSlotsAsync(id);
+            if (result == null || result.Count == 0) return new List<DtoMeetingSlotResponse>();
             return result;
         }
 
@@ -47,7 +47,6 @@ namespace TrainLink.Services
             var time = TimeOnly.Parse(updSlot.SlotTime);
             updSlot.SlotDate = DateOnly.FromDateTime(DateTime.Now).ToDateTime(time);
             return await _meetingRepository.UpdateMeetingSlotAsync(updSlot);
-
         }
     }
 }

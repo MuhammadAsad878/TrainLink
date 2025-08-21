@@ -6,7 +6,7 @@ namespace TrainLink.Services.Interfaces
 {
     public interface IMeetingService
     {
-        Task<List<DtoMeetingSlotResponse?>> GetMeetingSlotsAsync(int? id);
+        Task<List<DtoMeetingSlotResponse>> GetMeetingSlotsAsync(int? id);
         Task<DtoMeetingSlotResponse?> CreateMeetingSlotAsync(EntityMeetingSlot SlotTime);
         Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(EntityMeetingSlot UpdateMeetingSlot);
         Task<bool?> DeleteMeetingSlotAsync(EntityMeetingSlot deleteSlot);

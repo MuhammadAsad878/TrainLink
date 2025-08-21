@@ -31,7 +31,6 @@ namespace TrainLink.Repositories
             SlotId = result.SlotId,
             SlotTime = result.SlotDate.ToString(Formats.TIME_Format)
             };
-
         }
 
         public async Task<bool> DeleteMeetingSlotAsync(EntityMeetingSlot delSlot)
