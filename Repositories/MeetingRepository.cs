@@ -3,8 +3,9 @@ using TrainLink.DataAccess;
 using System.Data;
 using TrainLink.Dtos;
 using TrainLink.Repositories.Interfaces;
-using TrainLink.Entities;
 using TrainLink.Constants;
+using TrainLink.Models;
+using TrainLink.Entities;
 
 namespace TrainLink.Repositories
 {
@@ -16,10 +17,26 @@ namespace TrainLink.Repositories
             _dapper = dapper;
         }
 
+        public async Task<DtoMeetingLinkResponse?> CreateMeetingLinkAsync(MeetingLink newLink)
+        {
+            using var conn = _dapper.CreateConnection();
+            var result = await conn.QuerySingleOrDefaultAsync<MeetingLink?>(
+                "CreateMeetingLink",
+                new { newLink.SlotId, newLink.MeetingUrl, newLink.CreatedBy },
+                commandType: CommandType.StoredProcedure
+            );
+            if (result == null) return null;
+            return new DtoMeetingLinkResponse
+            {
+                LinkId = result.MeetingLinkId,
+                SlotId = result.SlotId,
+                Url = result.MeetingUrl
+            };
+        }
+
         public async Task<DtoMeetingSlotResponse?> CreateMeetingSlotAsync(EntityMeetingSlot dto)
         {
-            var time = TimeOnly.Parse(dto.SlotTime);
-            dto.SlotDate = DateTime.Today.Add(time.ToTimeSpan());
+            dto.SlotDate = DateTime.Today.Add(dto.SlotTime.ToTimeSpan());
             using var conn = _dapper.CreateConnection();
             var result = await conn.QuerySingleOrDefaultAsync<DtoMeetingSlot>(
                 "CreateMeetingSlot",
@@ -27,10 +44,22 @@ namespace TrainLink.Repositories
                 commandType: CommandType.StoredProcedure
                 );
             if (result == null) return null;
-            return new DtoMeetingSlotResponse { 
-            SlotId = result.SlotId,
-            SlotTime = result.SlotDate.ToString(Formats.TIME_Format)
+            return new DtoMeetingSlotResponse
+            {
+                SlotId = result.SlotId,
+                SlotTime = result.SlotDate.ToString(Formats.TIME_Format)
             };
+        }
+
+        public async Task<bool> DeleteMeetingLinkAsync(MeetingLink deleteLink)
+        {
+            using var conn = _dapper.CreateConnection();
+            var rowsEffected = await conn.QuerySingleAsync<int>(
+                "DeleteMeetingLink",
+                new { deleteLink.MeetingLinkId, deleteLink.UpdatedBy },
+                commandType: CommandType.StoredProcedure
+                );
+            return rowsEffected > 0;
         }
 
         public async Task<bool> DeleteMeetingSlotAsync(EntityMeetingSlot delSlot)
@@ -38,11 +67,47 @@ namespace TrainLink.Repositories
             using var conn = _dapper.CreateConnection();
             var result = await conn.QuerySingleAsync<int>(
                 "DeleteMeetingSlot",
-                new {  delSlot.SlotId, delSlot.UpdatedBy },
+                new { delSlot.SlotId, delSlot.UpdatedBy },
                 commandType: CommandType.StoredProcedure
             );
-            if (result > 0) return true;
-            return false;
+            return result > 0;
+        }
+
+        public async Task<List<DtoMeetingLinkResponse>?> GetMeetingLinksAsync(int? id)
+        {
+            using var conn = _dapper.CreateConnection();
+            if (id is null || id <= 0)
+            {
+                var result = await conn.QueryAsync<MeetingLink>(
+                    "GetActiveMeetingLinks",
+                    commandType: CommandType.StoredProcedure
+                );
+                if (result is null || !result.Any()) return null;
+                var newResult = result.Select(x => new DtoMeetingLinkResponse
+                {
+                    LinkId = x.MeetingLinkId,
+                    SlotId = x.SlotId,
+                    Url = x.MeetingUrl,
+                }).ToList();
+                return newResult;
+            }
+            else
+            {
+                var result = await conn.QuerySingleOrDefaultAsync<MeetingLink?>(
+                    "GetMeetingLinkById",
+                    new { @MeetingLinkId = id },
+                    commandType: CommandType.StoredProcedure
+                );
+                if (result is null || result.SlotId <= 0 || result.IsActive == 0) return null;
+                return new List<DtoMeetingLinkResponse> {
+                   new DtoMeetingLinkResponse
+                    {
+                        LinkId = result.MeetingLinkId,
+                        SlotId = result.SlotId,
+                        Url = result.MeetingUrl
+                    }
+               };
+            }
         }
 
         public async Task<DtoMeetingSlot?> GetMeetingSlotByIdAsync(int? slotId)
@@ -55,19 +120,19 @@ namespace TrainLink.Repositories
                 commandType: CommandType.StoredProcedure
             );
             if (result == null) return null;
-           return result;
+            return result;
         }
 
         public async Task<List<DtoMeetingSlotResponse>?> GetMeetingSlotsAsync(int? id)
         {
-            using var conn = _dapper.CreateConnection();            
+            using var conn = _dapper.CreateConnection();
             if (id is null || id <= 0)
             {
-                var result = await conn.QueryAsync<DtoMeetingSlot?>(
+                var result = await conn.QueryAsync<DtoMeetingSlot>(
                     "GetActiveMeetingSlots",
                     commandType: CommandType.StoredProcedure
                     );
-                if(result is null || !result.Any()) return null;
+                if (result is null || !result.Any()) return null;
                 var newResult = result.Select(x => new DtoMeetingSlotResponse
                 {
                     SlotId = x.SlotId,
@@ -92,8 +157,20 @@ namespace TrainLink.Repositories
             }
         }
 
+        public async Task<DtoMeetingLinkResponse?> UpdateMeetingLinkAsync(MeetingLink updateLink)
+        {
+            using var conn = _dapper.CreateConnection();
+            var result = await conn.QueryFirstOrDefaultAsync<MeetingLink>(
+                "UpdateMeetingLink",
+                new { updateLink.MeetingLinkId, updateLink.UpdatedBy, updateLink.MeetingUrl, updateLink.SlotId },
+                commandType: CommandType.StoredProcedure
+                );
+            if (result == null) return null;
+            return new DtoMeetingLinkResponse { LinkId = result.MeetingLinkId, SlotId = result.SlotId, Url = result.MeetingUrl };
+        }
+
         public async Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(EntityMeetingSlot updSlot)
-        {          
+        {
             using var conn = _dapper.CreateConnection();
             var result = await conn.QueryFirstOrDefaultAsync<DtoMeetingSlot?>(
                 "UpdateMeetingSlot",
@@ -106,7 +183,8 @@ namespace TrainLink.Repositories
                 commandType: CommandType.StoredProcedure
             );
             if (result == null) return null;
-            var updResult = new DtoMeetingSlotResponse {
+            var updResult = new DtoMeetingSlotResponse
+            {
                 SlotId = result.SlotId,
                 SlotTime = result.SlotDate.ToString(Formats.TIME_Format)
             };

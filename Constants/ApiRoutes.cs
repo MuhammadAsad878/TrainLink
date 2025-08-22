@@ -9,7 +9,12 @@
         // Slot Routes
         public const string GET_SLOTS = "slot/{id:int?}";
         public const string POST_SLOT = "slot";
-        public const string PUT_SLOT = "slot/{id}";
-        public const string DELETE_SLOT = "slot/{slotId:int}";
+        public const string PUT_SLOT = "slot/{id:int?}";
+        public const string DELETE_SLOT = "slot/{id:int?}";
+        // Link Routes
+        public const string GET_LINKS = "link/{id:int?}";
+        public const string POST_LINK = "link";
+        public const string PUT_LINK = "link/{id:int?}";
+        public const string DELETE_LINK = "link/{id:int}";
     }
 }

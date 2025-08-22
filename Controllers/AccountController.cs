@@ -19,7 +19,7 @@ namespace TrainLink.Controllers
 
         [HttpPost(ApiRoutes.LOGIN)]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] DtoLogin dtoLogin)
+        public async Task<IActionResult> Login([FromBody] LoginRequest dtoLogin)
         {
             if (dtoLogin is null) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ValidateLoginAsync(dtoLogin);
@@ -30,9 +30,9 @@ namespace TrainLink.Controllers
         [HttpPost(ApiRoutes.CHANGE_PASSWORD)]
         public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
         {
-            if(dto is null ) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
+            if (dto is null) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ChangePassword(dto);
-            if (response != null && !response.IsPasswordChanged) return BadRequest(response);
+            if (response != null && !response.Success) return BadRequest(response);
             return Ok(response);
         }
 
@@ -40,13 +40,7 @@ namespace TrainLink.Controllers
         public IActionResult Logout([FromBody] string? token)
         {
             if (token is null) return BadRequest(ValidationMessages.LOGIN_FIRST);
-
             return Ok(ValidationMessages.LOGOUT_SUCCESS);
         }
-
-
-
-
-
     }
 }

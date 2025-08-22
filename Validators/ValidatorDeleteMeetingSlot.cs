@@ -2,9 +2,9 @@
 using TrainLink.Constants;
 using TrainLink.Dtos;
 
-public class ValidatorMeetingSlotDelete : AbstractValidator<DtoMeetingSlotDelete>
+public class ValidatorDeleteMeetingSlot : AbstractValidator<DtoMeetingSlotDelete>
 {
-    public ValidatorMeetingSlotDelete()
+    public ValidatorDeleteMeetingSlot()
     {
         RuleFor(x => x.SlotId)
             .NotEmpty()

@@ -43,9 +43,9 @@ namespace TrainLink.Repositories
                 param: new { UserName = dto.Username, NewPassword = dto.NewPassword });
             if (result > 0)
             {
-                return new DtoChangePasswordResponse(dto.Username, true, ValidationMessages.PASSWORD_CHANGE_SUCCESS);
+                return new DtoChangePasswordResponse { Username = dto.Username, Success = true, Message = ValidationMessages.PASSWORD_CHANGE_SUCCESS };
             }
-            return new DtoChangePasswordResponse(dto.Username, false, ValidationMessages.PASSWORD_CHANGE_FAILED);
+            return new DtoChangePasswordResponse { Username = dto.Username, Success = false, Message = ValidationMessages.PASSWORD_CHANGE_FAILED };
         }
     }
 }
