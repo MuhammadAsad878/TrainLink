@@ -1,7 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using FluentValidation.AspNetCore;
 using System.Text;
 using TrainLink.DataAccess;
+using TrainLink.Repositories;
+using TrainLink.Repositories.Interfaces;
+using TrainLink.Services;
+using TrainLink.Services.Interfaces;
+using FluentValidation;
+using TrainLink.Dtos;
+using TrainLink.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +19,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// FluentValidation setup
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddScoped<IValidator<LoginRequest>, ValidatorLogin>();
+// Register services and repositories
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
