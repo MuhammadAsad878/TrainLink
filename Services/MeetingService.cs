@@ -24,7 +24,6 @@ namespace TrainLink.Services
 
         public async Task<DtoMeetingSlotResponse?> CreateMeetingSlotAsync(EntityMeetingSlot newSlot)
         {
-            if (newSlot is null || newSlot.CreatedBy is null) return null;
             return await _meetingRepository.CreateMeetingSlotAsync(newSlot);
         }
 
@@ -35,7 +34,6 @@ namespace TrainLink.Services
 
         public async Task<bool?> DeleteMeetingSlotAsync(EntityMeetingSlot delSlot)
         {
-            if (delSlot == null || delSlot.SlotId <= 0) return null;
             var validate = await _meetingRepository.GetMeetingSlotByIdAsync(delSlot.SlotId);
             if (validate == null || validate.IsActive == 0) return null;
             var result = await _meetingRepository.DeleteMeetingSlotAsync(delSlot);
@@ -63,7 +61,6 @@ namespace TrainLink.Services
 
         public async Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(EntityMeetingSlot updSlot)
         {
-            if (updSlot == null || updSlot.SlotId == null) return null;
             var validate = await _meetingRepository.GetMeetingSlotByIdAsync(updSlot.SlotId);
             if (validate == null || validate.IsActive == 0) return null;
             updSlot.SlotDate = DateOnly.FromDateTime(DateTime.Now).ToDateTime(updSlot.SlotTime);

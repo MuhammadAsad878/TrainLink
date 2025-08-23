@@ -24,7 +24,6 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<LoginRequest>, ValidatorLogin>();
 builder.Services.AddScoped<IValidator<DtoChangePassword>, ValidatorChangePassword>();
 builder.Services.AddScoped<IValidator<DtoMeetingSlotRequest>, ValidatorMeetingSlotRequest>();
-builder.Services.AddScoped<IValidator<DtoMeetingSlotDelete>, ValidatorDeleteMeetingSlot>();
 builder.Services.AddScoped<IValidator<DtoMeetingLinkRequest>, ValidatorMeetingLinkRequest>();
 
 // Register services and repositories

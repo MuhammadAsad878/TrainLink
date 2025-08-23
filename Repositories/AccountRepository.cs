@@ -1,7 +1,5 @@
-﻿
-using Dapper;
+﻿using Dapper;
 using System.Data;
-using TrainLink.Constants;
 using TrainLink.DataAccess;
 using TrainLink.Dtos;
 using TrainLink.Models;
@@ -39,7 +37,7 @@ namespace TrainLink.Repositories
                         );
             return result > 0;
         }
-        
+
         public bool? LogoutUser(string token)
         {
             return token != null;

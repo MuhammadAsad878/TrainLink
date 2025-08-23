@@ -8,6 +8,5 @@ namespace TrainLink.Repositories.Interfaces
         Task<User?> GetByUsernameAsync(string username);
         Task<bool> UpdatePassword(DtoChangePassword dtoChangePassword);
         bool? LogoutUser(string token);
-
     }
 }
