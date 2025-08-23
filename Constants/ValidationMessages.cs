@@ -20,7 +20,6 @@
         // Authentication / Login
         public const string INVALID_LOGIN_CREDENTIALS = "Invalid username or password.";
         public const string LOGIN_BAD_REQUEST = "Invalid login data.";
-        public const string NOT_FOUND = "Not Found";
         public const string LOGIN_FIRST = "Login First";
         public const string LOGOUT_SUCCESS = "Logout Successfully!";        
     }
