@@ -1,4 +1,6 @@
-﻿using Dapper;
+﻿
+using Dapper;
+using System.Data;
 using TrainLink.Constants;
 using TrainLink.DataAccess;
 using TrainLink.Dtos;
@@ -18,25 +20,29 @@ namespace TrainLink.Repositories
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
-            const string sql = @"SELECT TOP 1 Id, Username, PasswordHash, Name, Mobile, RoleId,
-                                    MembershipExpiry, CreatedAt, UpdatedAt
-                             FROM Users WHERE Username = @Username;";
             using var conn = _context.CreateConnection();
-            return await conn.QuerySingleOrDefaultAsync<User>(sql, new { Username = username });
+            var result = await conn.QuerySingleOrDefaultAsync<User>(
+                "GetUserByUsername",
+                new { Username = username },
+                commandType: CommandType.StoredProcedure
+                );
+            return result;
+        }
+
+        public async Task<bool> UpdatePassword(DtoChangePassword dto)
+        {
+            using var conn = _context.CreateConnection();
+            var result = await conn.ExecuteAsync(
+                "UpdatePassword",
+                new { Username = dto.Username, NewPassword = dto.NewPassword },
+                commandType: CommandType.StoredProcedure
+                        );
+            return result > 0;
         }
 
         public bool? LogoutUser(string token)
         {
-            return null;
+            return token != null;
         }
-
-        public async Task<bool?> UpdatePassword(DtoChangePassword dto)
-        {
-            const string sql = @"UPDATE Users SET PasswordHash = @NewPassword WHERE Username=@Username";
-            using var conn = _context.CreateConnection();
-            var res = await conn.ExecuteAsync(sql, new { dto.NewPassword, dto.Username });
-            return res > 0;
-        }
-
     }
 }

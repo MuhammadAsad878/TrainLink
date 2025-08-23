@@ -12,19 +12,16 @@
         public const string PASSWORD_REQUIRED = "Password is required.";
         public const string PASSWORD_TOO_SHORT = "Password must be at least 6 characters long.";
         public const string PASSWORD_TOO_LONG = "Password cannot be longer than 50 characters.";
-        public const string PASSWORD_MUST_HAVE_UPPERCASE = "Password must contain at least one uppercase letter.";
-        public const string PASSWORD_MUST_HAVE_LOWERCASE = "Password must contain at least one lowercase letter.";
-        public const string PASSWORD_MUST_HAVE_DIGIT = "Password must contain at least one digit.";
-        public const string PASSWORD_MUST_HAVE_SPECIAL_CHAR = "Password must contain at least one special character.";
         public const string PASSWORD_INVALID = "Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.";
+        public const string PASSWORD_NOT_SAME = "Both Old and New Passwords are same";
+        // Password Change
+        public const string PASSWORD_CHANGE_SUCCESS = "Password Changed Successfully!";
+        public const string PASSWORD_CHANGE_FAILED = "Password Not Changed!";
         // Authentication / Login
         public const string INVALID_LOGIN_CREDENTIALS = "Invalid username or password.";
         public const string LOGIN_BAD_REQUEST = "Invalid login data.";
         public const string NOT_FOUND = "Not Found";
         public const string LOGIN_FIRST = "Login First";
-        public const string LOGOUT_SUCCESS = "Logout Successfully!";
-        // Password Change
-        public const string PASSWORD_CHANGE_SUCCESS = "Password Changed Successfully!";
-        public const string PASSWORD_CHANGE_FAILED = "Password Not Changed!";
+        public const string LOGOUT_SUCCESS = "Logout Successfully!";        
     }
 }
