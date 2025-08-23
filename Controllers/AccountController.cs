@@ -26,7 +26,7 @@ namespace TrainLink.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
         {
-            if(dto is null ) return BadRequest(ValidationMessages.LoginBadRequest);
+            if(dto is null ) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ChangePassword(dto);
             if (!response.IsPasswordChanged) return BadRequest(response);
             return Ok(response);
