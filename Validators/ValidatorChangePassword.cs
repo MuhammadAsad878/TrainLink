@@ -14,21 +14,17 @@ namespace TrainLink.Validators
                 .MaximumLength(ValidationLengths.USERNAME_MAX_LENGTH).WithMessage(ValidationMessages.USERNAME_LENGTH_SHORT)
                 .Matches(RegexPatterns.USERNAME_PATTERN).WithMessage(ValidationMessages.USERNAME_INVALID);
 
-
             RuleFor(x => x.OldPassword)
                 .NotEmpty().WithMessage(ValidationMessages.PASSWORD_REQUIRED)
                 .MinimumLength(ValidationLengths.PASSWORD_MIN_LENGTH).WithMessage(ValidationMessages.PASSWORD_TOO_SHORT)
                 .MaximumLength(ValidationLengths.PASSWORD_MAX_LENGTH).WithMessage(ValidationMessages.PASSWORD_TOO_LONG)
                 .Matches(RegexPatterns.PASSWORD_PATTERN).WithMessage(ValidationMessages.PASSWORD_MUST_BE);
 
-
-
             RuleFor(x => x.NewPassword)
                .NotEmpty().WithMessage(ValidationMessages.PASSWORD_REQUIRED)
                .MinimumLength(ValidationLengths.PASSWORD_MIN_LENGTH).WithMessage(ValidationMessages.PASSWORD_TOO_SHORT)
                .MaximumLength(ValidationLengths.PASSWORD_MAX_LENGTH).WithMessage(ValidationMessages.PASSWORD_TOO_LONG)
                .Must((model, NewPassword) => model.OldPassword != model.NewPassword).WithMessage(ValidationMessages.PASSWORD_NOT_SAME);
-
         }
     }
 }

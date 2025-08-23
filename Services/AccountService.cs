@@ -29,26 +29,20 @@ namespace TrainLink.Services
             return response;
         }
 
-        public async Task<DtoChangePasswordResponse?> ChangePassword(DtoChangePassword dto)
+        public async Task<bool?> ChangePassword(DtoChangePassword dto)
         {
-            if (dto is null) return new DtoChangePasswordResponse { Username = null, Success = false, Message = ValidationMessages.INVALID_LOGIN_CREDENTIALS }; 
             var user = await _account.GetByUsernameAsync(dto.Username);
-            if (user == null) return new DtoChangePasswordResponse { Username = null, Success = false, Message = ValidationMessages.NOT_FOUND };
-            var verified = PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash);
-            if (!verified) return new DtoChangePasswordResponse { Username = null, Success = false, Message = ValidationMessages.INVALID_LOGIN_CREDENTIALS };
+            if (user is null) return null;
+            var ok = PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash);
+            if (!ok) return null;
             dto.NewPassword = PasswordHelper.HashPassword(dto.NewPassword);
             return await _account.UpdatePassword(dto);
         }
 
         public bool? LogoutUser(string token)
         {
-            if (token == null) return false;            
-            throw new NotImplementedException();
+            return token != null;
         }
 
-        void IAccountService.LogoutUser(string token)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

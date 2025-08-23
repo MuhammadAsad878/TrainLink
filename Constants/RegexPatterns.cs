@@ -2,8 +2,8 @@
 {
     public static class RegexPatterns
     {
-        // Password must have at least one lowercase, one uppercase, one digit, one special char, and minimum length defined by PASSWORD_MIN_LENGTH
-        public const string PASSWORD_PATTERN = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$";
+        // Password must have at least one lowercase, one uppercase, one digit, one special char, and minimum length 6
+        public const string PASSWORD_PATTERN = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$";
         // Basic email format: must contain text before @, domain name, and TLD
         public const string EMAIL_PATTERN = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
         // E.164 phone number format: optional +, followed by up to 15 digits (first digit non-zero)

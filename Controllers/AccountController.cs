@@ -14,14 +14,13 @@ namespace TrainLink.Controllers
         private readonly IAccountService _accountService;
         public AccountController(IAccountService accountService)
         {
-            _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+            _accountService = accountService;
         }
 
         [HttpPost(ApiRoutes.LOGIN)]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest dtoLogin)
         {
-            if (dtoLogin is null) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ValidateLoginAsync(dtoLogin);
             if (response is null) return Unauthorized(ValidationMessages.INVALID_LOGIN_CREDENTIALS);
             return Ok(response);
@@ -30,10 +29,10 @@ namespace TrainLink.Controllers
         [HttpPost(ApiRoutes.CHANGE_PASSWORD)]
         public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
         {
-            if (dto is null) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ChangePassword(dto);
-            if (response != null && !response.Success) return BadRequest(response);
-            return Ok(response);
+            if (response is null || response == false)
+                return BadRequest(ValidationMessages.INVALID_LOGIN_CREDENTIALS);
+            return Ok(ValidationMessages.PASSWORD_CHANGE_SUCCESS);
         }
 
         [HttpPost(ApiRoutes.LOGOUT)]
