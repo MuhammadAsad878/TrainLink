@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿
+using Dapper;
 using System.Data;
 using TrainLink.Constants;
 using TrainLink.DataAccess;

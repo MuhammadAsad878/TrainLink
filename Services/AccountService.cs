@@ -21,7 +21,7 @@ namespace TrainLink.Services
         public async Task<LoginResponse?> ValidateLoginAsync(LoginRequest dto)
         {
             var user = await _account.GetByUsernameAsync(dto.Username);
-            if (user is null) return null;          
+            if (user is null) return null;
             var ok = PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash);
             if(!ok) return null;
             var token = JwtHelper.GenerateJwtToken(user,_config);

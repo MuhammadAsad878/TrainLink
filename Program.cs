@@ -13,7 +13,6 @@ using TrainLink.Validators;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddControllers();
@@ -52,7 +51,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             NameClaimType = ClaimTypes.Name
         };
     });
-
 builder.Services.AddAuthorization();
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -61,11 +59,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
