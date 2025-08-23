@@ -1,15 +1,12 @@
 ﻿namespace TrainLink.Constants
 {
-    public class RegexPatterns
+    public static class RegexPatterns
     {
-        public static string PasswordPattern = $@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{{{ValidationLengths.MinPassword},}}$";
-        public const string EmailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$"; 
-        public const string PhoneNumberPattern = @"^\+?[1-9]\d{1,14}$";
-        public static string UsernamePattern =  $@"^[a-zA-Z][a-zA-Z0-9_]{{{ValidationLengths.MinUsername-1},{ValidationLengths.MaxUsername-1}}}$";
-
-        public const string PasswordUppercase = @"[A-Z]";
-        public const string PasswordLowercase = @"[a-z]";
-        public const string PasswordDigit = @"\d";
-        public const string PasswordSpecialChar = @"[@$!%*?&]";
+        // Password must contain atlease one uppercase, one lowercase, one digit, one special character MinLength 6
+        public const string PASSWORD_PATTERN = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$";
+        // Email must follow standard format: local@domain.extension all parts local, domain, extension dont have spaces or @
+        public const string EMAIL_PATTERN = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        // Username must: Start with a letter, contain only letters, numbers, underscores and between 3-20 characters long
+        public const string USERNAME_PATTERN = @"^[a-zA-Z][a-zA-Z0-9_]{2,19}$";
     }
 }

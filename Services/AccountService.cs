@@ -17,15 +17,18 @@ namespace TrainLink.Services
             _account = account;
             _config = config;
         }
-               
-        public async Task<DtoLoginResponse?> ValidateLoginAsync(DtoLogin dto)
+
+        public async Task<LoginResponse?> ValidateLoginAsync(LoginRequest dto)
         {
             var user = await _account.GetByUsernameAsync(dto.Username);
             if (user is null) return null;          
             var ok = PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash);
             if(!ok) return null;
             var token = JwtHelper.GenerateJwtToken(user,_config);
-            var response = new DtoLoginResponse(user.Username, token);               
+            var response = new LoginResponse { 
+                Username=user.Username,
+                Token=token
+            };               
             return response;
         }
 
@@ -47,10 +50,6 @@ namespace TrainLink.Services
             
             throw new NotImplementedException();
         }
-
-
-
-
 
     }
 }

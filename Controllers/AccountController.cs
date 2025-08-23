@@ -12,15 +12,14 @@ namespace TrainLink.Controllers
         private readonly IAccountService _accountService;
         public AccountController(IAccountService accountService)
         {
-            _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+            _accountService = accountService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] DtoLogin dtoLogin)
+        [HttpPost(ApiRoutes.LOGIN)]
+        public async Task<IActionResult> Login([FromBody] LoginRequest dtoLogin)
         {
-            if (dtoLogin is null) return BadRequest(ValidationMessages.LoginBadRequest);
             var response = await _accountService.ValidateLoginAsync(dtoLogin);
-            if (response is null) return Unauthorized(ValidationMessages.InvalidLoginCredentials);
+            if (response is null) return Unauthorized(ValidationMessages.INVALID_LOGIN_CREDENTIALS);
             return Ok(response);
         }
 
@@ -40,10 +39,5 @@ namespace TrainLink.Controllers
 
             return Ok(ValidationMessages.LogoutSuccess);
         }
-
-
-
-
-
     }
 }

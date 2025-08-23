@@ -21,7 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // FluentValidation setup
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddScoped<IValidator<DtoLogin>, ValidatorLogin>();
+builder.Services.AddScoped<IValidator<LoginRequest>, ValidatorLogin>();
+
 builder.Services.AddScoped<IValidator<DtoChangePassword>, ValidatorChangePassword>();
 // Register services and repositories
 builder.Services.AddScoped<IAccountService, AccountService>();
