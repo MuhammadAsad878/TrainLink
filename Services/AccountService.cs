@@ -25,31 +25,26 @@ namespace TrainLink.Services
             var ok = PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash);
             if(!ok) return null;
             var token = JwtHelper.GenerateJwtToken(user,_config);
-            var response = new LoginResponse { 
+            return new LoginResponse { 
                 Username=user.Username,
                 Token=token
             };               
-            return response;
+           
         }
 
-        public async Task<DtoChangePasswordResponse?> ChangePassword(DtoChangePassword dto)
+        public async Task<bool?> ChangePassword(DtoChangePassword dto)
         {
-            if (dto is null) return new DtoChangePasswordResponse(null, false, ValidationMessages.INVALID_LOGIN_CREDENTIALS); ;
             var user = await _account.GetByUsernameAsync(dto.Username);
-            if (user == null) return new DtoChangePasswordResponse(null,false,ValidationMessages.NotFound);
-            var verified = PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash);
-            if (!verified) return new DtoChangePasswordResponse(null, false, ValidationMessages.INVALID_LOGIN_CREDENTIALS); ;
+            if (user == null) return null;
+            var isVerified = PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash);
+            if (!isVerified) return false;
             dto.NewPassword = PasswordHelper.HashPassword(dto.NewPassword);
             return await _account.UpdatePassword(dto);
-
         }
 
         public bool? LogoutUser(string token)
         {
-            if (token == null) return false;
-            
-            throw new NotImplementedException();
+            return null;
         }
-
     }
 }

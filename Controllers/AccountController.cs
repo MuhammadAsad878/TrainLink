@@ -23,21 +23,20 @@ namespace TrainLink.Controllers
             return Ok(response);
         }
 
-        [HttpPost("change-password")]
+        [HttpPost(ApiRoutes.CHANGE_PASSWORD)]
         public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
         {
-            if(dto is null ) return BadRequest(ValidationMessages.LOGIN_BAD_REQUEST);
             var response = await _accountService.ChangePassword(dto);
-            if (!response.IsPasswordChanged) return BadRequest(response);
-            return Ok(response);
+            if(response is null || response == false) 
+                return BadRequest(ValidationMessages.INVALID_LOGIN_CREDENTIALS);
+            return Ok(ValidationMessages.PASSWORD_CHANGE_SUCCESS);
         }
 
-        [HttpPost("logout")]
+        [HttpPost(ApiRoutes.LOGOUT)]
         public IActionResult Logout([FromBody] string? token)
         {
-            if (token is null) return BadRequest(ValidationMessages.LoginFirst);
-
-            return Ok(ValidationMessages.LogoutSuccess);
+            if (token is null) return BadRequest(ValidationMessages.LOGIN_FIRST);
+            return Ok(ValidationMessages.LOGOUT_SUCCESS);
         }
     }
 }

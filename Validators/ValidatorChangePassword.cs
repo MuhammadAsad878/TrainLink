@@ -14,7 +14,6 @@ namespace TrainLink.Validators
                 .MaximumLength(ValidationLengths.MAX_USERNAME).WithMessage(ValidationMessages.USERNAME_LENGTH_LONG)
                 .Matches(RegexPatterns.USERNAME_PATTERN).WithMessage(ValidationMessages.USERNAME_INVALID);
 
-
             RuleFor(x => x.OldPassword)
                 .NotEmpty().WithMessage(ValidationMessages.PASSWORD_REQUIRED)
                 .MinimumLength(ValidationLengths.MIN_PASSWORD).WithMessage(ValidationMessages.PASSWORD_TOO_SHORT)

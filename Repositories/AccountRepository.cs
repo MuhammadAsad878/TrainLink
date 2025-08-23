@@ -25,21 +25,18 @@ namespace TrainLink.Repositories
             return await conn.QuerySingleOrDefaultAsync<User>(sql, new { Username = username });
         }
 
-        public void LogoutUser(string token)
+        public bool? LogoutUser(string token)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
-        public async Task<DtoChangePasswordResponse?> UpdatePassword(DtoChangePassword dto)
+        public async Task<bool?> UpdatePassword(DtoChangePassword dto)
         {
-            const string sql = @"UPDATE Users SET PasswordHash = @NewPassword WHERE Username= @Username";
+            const string sql = @"UPDATE Users SET PasswordHash = @NewPassword WHERE Username=@Username";
             using var conn = _context.CreateConnection();
-            var res =  await conn.ExecuteAsync(sql, new { NewPassword = dto.NewPassword, Username = dto.Username });
-            if (res > 0)
-            {
-                return new DtoChangePasswordResponse(dto.Username, true, ValidationMessages.PasswordChangeSuccess);
-            }
-            return new DtoChangePasswordResponse(dto.Username,false,ValidationMessages.PasswordChangeFailed);
+            var res = await conn.ExecuteAsync(sql, new { dto.NewPassword, dto.Username });
+            return res > 0;
         }
+
     }
 }
