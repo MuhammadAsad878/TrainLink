@@ -136,7 +136,9 @@ namespace TrainLink.Repositories
                 var newResult = result.Select(x => new DtoMeetingSlotResponse
                 {
                     SlotId = x.SlotId,
-                    SlotTime = x.SlotDate.ToLocalTime().ToString(Formats.TIME_Format)
+                    SlotTime = x.SlotDate.ToString(Formats.TIME_Format),  
+                    MeetingLinkId = x.MeetingLinkId,
+                    MeetingUrl = x.MeetingUrl
                 });
                 return newResult?.ToList();
             }
@@ -151,7 +153,9 @@ namespace TrainLink.Repositories
                 var response = new DtoMeetingSlotResponse
                 {
                     SlotId = result.SlotId,
-                    SlotTime = result.SlotDate.ToString(Formats.TIME_Format)
+                    SlotTime = result.SlotDate.ToString(Formats.TIME_Format),
+                    MeetingLinkId=result.MeetingLinkId,
+                    MeetingUrl=result.MeetingUrl                   
                 };
                 return new List<DtoMeetingSlotResponse> { response };
             }

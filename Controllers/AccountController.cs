@@ -36,9 +36,10 @@ namespace TrainLink.Controllers
         }
 
         [HttpPost(ApiRoutes.LOGOUT)]
-        public IActionResult Logout([FromBody] string? token)
+        public IActionResult Logout()
         {
-            if (token is null) return BadRequest(ValidationMessages.LOGIN_FIRST);
+            var authToken = Request.Headers["Authorization"].ToString();
+            if (authToken is null) return BadRequest(ValidationMessages.LOGIN_FIRST);
             return Ok(ValidationMessages.LOGOUT_SUCCESS);
         }
     }

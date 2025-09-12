@@ -35,11 +35,13 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularClients", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
+
 // Configure JWT authentication
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -66,8 +68,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowAngularClients");
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
-app.UseCors("AllowAngularClients");
 app.MapControllers();
 app.Run();
