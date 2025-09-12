@@ -12,5 +12,7 @@
         public const string USERNAME_PATTERN = @"^[a-zA-Z][a-zA-Z0-9_]{2,19}$";       
         // Must start with http, https, or ftp, followed by a valid domain (e.g., example.com), optional port, and optional path
         public const string VALID_URL = @"^(https?|ftp)://([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(:\d+)?(/.*)?$";
+        // Mobile: optional +, 8–15 digits, no leading zero
+        public const string MOBILE_PATTERN = @"^\+?[1-9][0-9]{7,14}$";
     }
 }

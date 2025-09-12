@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TrainLink.Constants;
 using TrainLink.Dtos;
@@ -13,12 +14,112 @@ namespace TrainLink.Controllers
     [Authorize(Roles = nameof(UserRoles.Admin))]
     public class AdminController : ControllerBase
     {
-        private readonly IMeetingService _service;
-        public AdminController(IMeetingService service)
+        private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
+
+        public AdminController(IUserService userService, IRoleService roleService)
         {
-            _service = service;
+            _userService = userService;
+            _roleService = roleService;
+        }
+        // ------------------ USERS ------------------
+        [HttpGet(ApiRoutes.GET_USERS)]
+        public async Task<IActionResult> GetUsers([FromRoute] int? id)
+        {
+            var result = await _userService.GetAllUsersAsync(id);
+            if (result == null || result.Count == 0)
+                return NotFound(ValidationMessages.USER_NOT_FOUND);
+            return Ok(result);
+        }        
+
+        [HttpPost(ApiRoutes.POST_USER)]
+        public async Task<IActionResult> CreateUser([FromBody] DtoCreateUser dto)
+        {
+            var createdBy = User.Identity?.Name;
+            if (createdBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            var newUser = new User
+            {
+                Name = dto.Name,
+                Username = dto.Username,
+                Mobile = dto.Mobile,
+                RoleId = dto.RoleId,
+                PasswordHash = dto.Password, 
+                MembershipExpiry= dto.MembershipExpiry,
+                CreatedBy = createdBy
+            };
+            var result = await _userService.CreateUserAsync(newUser);
+            if (result == null) return BadRequest(ValidationMessages.USER_CREATION_FAILED);
+            return Ok(result);
         }
 
-        
+        [HttpPut(ApiRoutes.PUT_USER)]
+        public async Task<IActionResult> UpdateUser([FromBody] DtoCreateUser dto, [FromRoute] int id)
+        {
+            var updatedBy = User.Identity?.Name;
+            if (updatedBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            var entity = new User
+            {
+                Id = id,
+                Username = dto.Username,
+                UpdatedBy = updatedBy,
+                Name = dto.Name,
+                Mobile = dto.Mobile,
+                RoleId = dto.RoleId,
+                PasswordHash = dto.Password,
+                MembershipExpiry = dto.MembershipExpiry,
+            };
+            var result = await _userService.UpdateUserAsync(entity);
+            if (result == null) return NotFound(ValidationMessages.USER_NOT_FOUND);
+            return Ok(result);
+        }
+
+        [HttpDelete(ApiRoutes.DELETE_USER)]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            if (id <= 0) return BadRequest(ValidationMessages.INVALID_USER_ID);
+            var updatedBy = User.Identity?.Name;
+            if (updatedBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            var user = new User { UpdatedBy=updatedBy, Id=id };
+            var result = await _userService.DeleteUserAsync(user);
+            if (result == false)
+                return NotFound(ValidationMessages.USER_NOT_FOUND);
+            return Ok(ValidationMessages.USER_DELETED_SUCCESSFULLY);
+        }
+
+        // ------------------ ROLES ------------------
+
+        //[HttpGet(ApiRoutes.GET_ROLES)]
+        //public async Task<IActionResult> GetRoles()
+        //{
+        //    var result = await _roleService.GetAllRolesAsync();
+        //    if (result == null || result.Count == 0)
+        //        return NotFound(ValidationMessages.ROLE_NOT_FOUND);
+        //    return Ok(result);
+        //}
+
+        //[HttpPost(ApiRoutes.POST_ROLE)]
+        //public async Task<IActionResult> CreateRole([FromBody] DtoRole dto)
+        //{
+        //    var createdBy = User.Identity?.Name;
+        //    if (createdBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+
+        //    var entity = new EntityRole { RoleName = dto.RoleName, CreatedBy = createdBy };
+        //    var result = await _roleService.CreateRoleAsync(entity);
+        //    if (result == null) return BadRequest(ValidationMessages.FAILED_TO_CREATE_ROLE);
+        //    return Ok(result);
+        //}
+
+        //[HttpDelete(ApiRoutes.DELETE_ROLE)]
+        //public async Task<IActionResult> DeleteRole([FromRoute] int id)
+        //{
+        //    if (id <= 0) return BadRequest(ValidationMessages.INVALID_ROLE_ID);
+        //    var updatedBy = User.Identity?.Name;
+        //    if (updatedBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+
+        //    var entity = new EntityRole { RoleId = id, UpdatedBy = updatedBy };
+        //    var result = await _roleService.DeleteRoleAsync(entity);
+        //    if (!result) return NotFound(ValidationMessages.ROLE_NOT_FOUND);
+        //    return Ok(ValidationMessages.ROLE_DELETED_SUCCESSFULLY);
+        //}
     }
 }

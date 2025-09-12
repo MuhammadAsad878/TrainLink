@@ -62,5 +62,42 @@
         public const string MEETING_LINK_ID_INVALID = "Meeting Link ID must be a valid positive number.";
         public const string MEETING_URL_REQUIRED = "Meeting URL is required.";
         public const string MEETING_URL_INVALID = "Meeting URL is not valid. Please provide a valid URL.";
+        // =====================
+        // USER MESSAGES
+        // =====================
+        public const string USER_REQUIRED = "User data is required.";
+        public const string USER_NOT_FOUND = "User not found.";
+        public const string USER_CREATED_SUCCESSFULLY = "User created successfully.";
+        public const string USER_CREATION_FAILED = "Failed to create user.";
+        public const string USER_UPDATED_SUCCESSFULLY = "User updated successfully.";
+        public const string USER_UPDATE_FAILED = "Failed to update user.";
+        public const string USER_DELETED_SUCCESSFULLY = "User deleted successfully.";
+        public const string USER_DELETE_FAILED = "Failed to delete user.";
+        public const string INVALID_USER_ID = "Invalid User ID provided. It must be a positive integer.";
+        public const string USER_PASSWORD_CHANGE_SUCCESS = "Password changed successfully.";
+        public const string USER_PASSWORD_CHANGE_FAILED = "Failed to change password.";
+        // =====================
+        // ROLE MESSAGES
+        // =====================
+        public const string ROLE_REQUIRED = "Role data is required.";
+        public const string ROLE_NOT_FOUND = "Role not found.";
+        public const string ROLE_ALREADY_EXISTS = "Role with this name already exists.";
+        public const string ROLE_CREATED_SUCCESSFULLY = "Role created successfully.";
+        public const string ROLE_CREATION_FAILED = "Failed to create role.";
+        public const string ROLE_UPDATED_SUCCESSFULLY = "Role updated successfully.";
+        public const string ROLE_UPDATE_FAILED = "Failed to update role.";
+        public const string ROLE_DELETED_SUCCESSFULLY = "Role deleted successfully.";
+        public const string ROLE_DELETE_FAILED = "Failed to delete role.";
+        public const string INVALID_ROLE_ID = "Invalid Role ID provided. It must be a positive integer.";
+
+
+        public const string NAME_REQUIRED = "Name is required.";
+        public const string NAME_LENGTH_LONG = "Name is too long.";
+
+        public const string MOBILE_REQUIRED = "Mobile number is required.";
+        public const string MOBILE_INVALID = "Mobile number format is invalid.";
+
+
+        public const string MEMBERSHIP_EXPIRY_INVALID = "Membership expiry must be a future date.";
     }
 }

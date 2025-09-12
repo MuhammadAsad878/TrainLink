@@ -12,5 +12,10 @@
         public const int MEETING_SLOT_MAX_LENGTH = 100;
         public const int CREATED_BY_MAX_LENGTH = 50;
         public const int UPDATED_BY_MAX_LENGTH = 50;
+
+
+        public const int NAME_MAX_LENGTH = 150;
+
+        public const int MOBILE_MAX_LENGTH = 30;
     }
 }

@@ -25,12 +25,17 @@ builder.Services.AddScoped<IValidator<LoginRequest>, ValidatorLogin>();
 builder.Services.AddScoped<IValidator<DtoChangePassword>, ValidatorChangePassword>();
 builder.Services.AddScoped<IValidator<DtoMeetingSlotRequest>, ValidatorMeetingSlotRequest>();
 builder.Services.AddScoped<IValidator<DtoMeetingLinkRequest>, ValidatorMeetingLinkRequest>();
+builder.Services.AddScoped<IValidator<DtoCreateUser>, ValidatorCreateUser>();
 
 // Register services and repositories
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IMeetingService, MeetingService>();
 builder.Services.AddScoped<IMeetingRepository,MeetingRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularClients", policy =>
