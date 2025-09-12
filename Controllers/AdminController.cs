@@ -88,38 +88,32 @@ namespace TrainLink.Controllers
 
         // ------------------ ROLES ------------------
 
-        //[HttpGet(ApiRoutes.GET_ROLES)]
-        //public async Task<IActionResult> GetRoles()
-        //{
-        //    var result = await _roleService.GetAllRolesAsync();
-        //    if (result == null || result.Count == 0)
-        //        return NotFound(ValidationMessages.ROLE_NOT_FOUND);
-        //    return Ok(result);
-        //}
+        [HttpGet(ApiRoutes.GET_ROLES)]
+        public async Task<IActionResult> GetRoles()
+        {
+            var result = await _roleService.GetAllRolesAsync();
+            return Ok(result);
+        }
 
-        //[HttpPost(ApiRoutes.POST_ROLE)]
-        //public async Task<IActionResult> CreateRole([FromBody] DtoRole dto)
-        //{
-        //    var createdBy = User.Identity?.Name;
-        //    if (createdBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+        [HttpPost(ApiRoutes.POST_ROLE)]
+        public async Task<IActionResult> CreateRole([FromBody] DtoRole dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                return BadRequest(ValidationMessages.ROLE_REQUIRED);
+            var result = await _roleService.CreateRoleAsync(dto.Name.ToLower());
+            if(result==null) return BadRequest(ValidationMessages.ROLE_CREATION_FAILED);
+            return Ok(result);
+        }
 
-        //    var entity = new EntityRole { RoleName = dto.RoleName, CreatedBy = createdBy };
-        //    var result = await _roleService.CreateRoleAsync(entity);
-        //    if (result == null) return BadRequest(ValidationMessages.FAILED_TO_CREATE_ROLE);
-        //    return Ok(result);
-        //}
-
-        //[HttpDelete(ApiRoutes.DELETE_ROLE)]
-        //public async Task<IActionResult> DeleteRole([FromRoute] int id)
-        //{
-        //    if (id <= 0) return BadRequest(ValidationMessages.INVALID_ROLE_ID);
-        //    var updatedBy = User.Identity?.Name;
-        //    if (updatedBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
-
-        //    var entity = new EntityRole { RoleId = id, UpdatedBy = updatedBy };
-        //    var result = await _roleService.DeleteRoleAsync(entity);
-        //    if (!result) return NotFound(ValidationMessages.ROLE_NOT_FOUND);
-        //    return Ok(ValidationMessages.ROLE_DELETED_SUCCESSFULLY);
-        //}
+        [HttpPut(ApiRoutes.PUT_ROLE)]
+        public async Task<IActionResult> UpdateRole([FromBody] DtoRole dto, [FromRoute] int id)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                return BadRequest(ValidationMessages.ROLE_REQUIRED);
+            var role = new Role { Id = id, Name = dto.Name.ToLower() };
+            var result = await _roleService.UpdateRoleAsync(role);
+            if (result == null) return NotFound(ValidationMessages.ROLE_NOT_FOUND);
+            return Ok(result);
+        }
     }
 }

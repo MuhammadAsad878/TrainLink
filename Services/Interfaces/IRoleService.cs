@@ -6,8 +6,7 @@ namespace TrainLink.Services.Interfaces
     public interface IRoleService
     {
         Task<List<Role>> GetAllRolesAsync();
-        Task<Role?> CreateRoleAsync(DtoRole role);
-        Task<Role?> UpdateRoleAsync(DtoRole role);
-        Task<bool> DeleteRoleAsync(int roleId);
+        Task<Role?> CreateRoleAsync(string role);
+        Task<Role?> UpdateRoleAsync(Role role);
     }
 }

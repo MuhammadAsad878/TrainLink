@@ -79,7 +79,7 @@
         // =====================
         // ROLE MESSAGES
         // =====================
-        public const string ROLE_REQUIRED = "Role data is required.";
+        public const string ROLE_REQUIRED = "Role name is required and must be alphabet";
         public const string ROLE_NOT_FOUND = "Role not found.";
         public const string ROLE_ALREADY_EXISTS = "Role with this name already exists.";
         public const string ROLE_CREATED_SUCCESSFULLY = "Role created successfully.";

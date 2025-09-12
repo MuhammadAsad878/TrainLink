@@ -1,29 +1,31 @@
 ﻿using TrainLink.Dtos;
 using TrainLink.Models;
+using TrainLink.Repositories.Interfaces;
 using TrainLink.Services.Interfaces;
 
 namespace TrainLink.Services
 {
     public class RoleService : IRoleService
     {
-        public Task<Role?> CreateRoleAsync(DtoRole role)
+        private readonly IRoleRepository _repo;
+        public RoleService(IRoleRepository repo)
         {
-            throw new NotImplementedException();
+            _repo = repo;
         }
 
-        public Task<bool> DeleteRoleAsync(int roleId)
+        public async Task<List<Role>> GetAllRolesAsync()
         {
-            throw new NotImplementedException();
+            return await _repo.GetAllAsync();
         }
 
-        public Task<List<Role>> GetAllRolesAsync()
+        public async Task<Role?> CreateRoleAsync(string role)
         {
-            throw new NotImplementedException();
+            return await _repo.CreateAsync(role);
         }
 
-        public Task<Role?> UpdateRoleAsync(DtoRole role)
+        public async Task<Role?> UpdateRoleAsync(Role role)
         {
-            throw new NotImplementedException();
+            return await _repo.UpdateAsync(role);
         }
     }
 }
