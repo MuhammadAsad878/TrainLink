@@ -44,7 +44,6 @@ namespace TrainLink.Controllers
                 Mobile = dto.Mobile,
                 RoleId = dto.RoleId,
                 PasswordHash = dto.Password, 
-                MembershipExpiry= dto.MembershipExpiry,
                 CreatedBy = createdBy
             };
             var result = await _userService.CreateUserAsync(newUser);
@@ -66,7 +65,6 @@ namespace TrainLink.Controllers
                 Mobile = dto.Mobile,
                 RoleId = dto.RoleId,
                 PasswordHash = dto.Password,
-                MembershipExpiry = dto.MembershipExpiry,
             };
             var result = await _userService.UpdateUserAsync(entity);
             if (result == null) return NotFound(ValidationMessages.USER_NOT_FOUND);
@@ -83,7 +81,7 @@ namespace TrainLink.Controllers
             var result = await _userService.DeleteUserAsync(user);
             if (result == false)
                 return NotFound(ValidationMessages.USER_NOT_FOUND);
-            return Ok(ValidationMessages.USER_DELETED_SUCCESSFULLY);
+            return Ok(new { message= ValidationMessages.USER_DELETED_SUCCESSFULLY });
         }
 
         // ------------------ ROLES ------------------
@@ -100,17 +98,17 @@ namespace TrainLink.Controllers
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
                 return BadRequest(ValidationMessages.ROLE_REQUIRED);
-            var result = await _roleService.CreateRoleAsync(dto.Name.ToLower());
+            var result = await _roleService.CreateRoleAsync(dto.Name);
             if(result==null) return BadRequest(ValidationMessages.ROLE_CREATION_FAILED);
             return Ok(result);
         }
-
+        
         [HttpPut(ApiRoutes.PUT_ROLE)]
         public async Task<IActionResult> UpdateRole([FromBody] DtoRole dto, [FromRoute] int id)
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
                 return BadRequest(ValidationMessages.ROLE_REQUIRED);
-            var role = new Role { Id = id, Name = dto.Name.ToLower() };
+            var role = new Role { Id = id, Name = dto.Name };
             var result = await _roleService.UpdateRoleAsync(role);
             if (result == null) return NotFound(ValidationMessages.ROLE_NOT_FOUND);
             return Ok(result);

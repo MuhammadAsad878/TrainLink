@@ -54,7 +54,6 @@ namespace TrainLink.Repositories
                     user.Name,
                     user.Mobile,
                     user.RoleId,
-                    user.MembershipExpiry,
                     user.CreatedBy
                 },
                 commandType: CommandType.StoredProcedure

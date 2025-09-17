@@ -3,6 +3,7 @@ using TrainLink.Dtos;
 using TrainLink.Constants;
 using TrainLink.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using TrainLink.Models;
 
 namespace TrainLink.Controllers
 {

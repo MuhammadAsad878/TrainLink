@@ -31,9 +31,9 @@ namespace TrainLink.Validators
             RuleFor(x => x.RoleId)
                 .GreaterThan(0).WithMessage(ValidationMessages.ROLE_REQUIRED);
 
-            RuleFor(x => x.MembershipExpiry)
-                .GreaterThan(DateTime.UtcNow).When(x => x.MembershipExpiry.HasValue)
-                .WithMessage(ValidationMessages.MEMBERSHIP_EXPIRY_INVALID);
+            //RuleFor(x => x.MembershipExpiry)
+            //    .GreaterThan(DateTime.UtcNow).When(x => x.MembershipExpiry.HasValue)
+            //    .WithMessage(ValidationMessages.MEMBERSHIP_EXPIRY_INVALID);
         }
     }
 }

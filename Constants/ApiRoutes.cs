@@ -19,8 +19,8 @@
         // User Routes
         public const string GET_USERS = "user/{id:int?}";               
         public const string POST_USER = "user";               
-        public const string PUT_USER = "user/{id}";           
-        public const string DELETE_USER = "user/{id}";                
+        public const string PUT_USER = "user/{id:int}";           
+        public const string DELETE_USER = "user/{id:int}";                
         // Role Routes
         public const string GET_ROLES = "role";               
         public const string POST_ROLE = "role";               
