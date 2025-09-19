@@ -61,21 +61,18 @@ namespace TrainLink.Repositories
             return createdUser;
         }
 
-        public async Task<DtoUserResponse?> UpdateAsync(User user)
+        public async Task<DtoUserResponse?> UpdateAsync(DtoUserResponse user, string updatedBy)
         {
             using var connection = _dapper.CreateConnection();
             var updatedUser = await connection.QueryFirstOrDefaultAsync<DtoUserResponse>(
                 "UpdateUser",
-                new
-                {
+                new {
                     user.Id,
-                    user.Username,
-                    user.PasswordHash,
                     user.Name,
                     user.Mobile,
                     user.RoleId,
-                    user.MembershipExpiry,
-                    user.UpdatedBy
+                    user.PasswordHash,
+                    UpdatedBy = updatedBy
                 },
                 commandType: CommandType.StoredProcedure
             );

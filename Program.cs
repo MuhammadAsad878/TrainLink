@@ -26,6 +26,7 @@ builder.Services.AddScoped<IValidator<DtoChangePassword>, ValidatorChangePasswor
 builder.Services.AddScoped<IValidator<DtoMeetingSlotRequest>, ValidatorMeetingSlotRequest>();
 builder.Services.AddScoped<IValidator<DtoMeetingLinkRequest>, ValidatorMeetingLinkRequest>();
 builder.Services.AddScoped<IValidator<DtoCreateUser>, ValidatorCreateUser>();
+builder.Services.AddScoped<IValidator<DtoUpdateUser>, ValidatorUpdateUser>();
 
 // Register services and repositories
 builder.Services.AddScoped<IAccountService, AccountService>();

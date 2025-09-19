@@ -7,7 +7,7 @@ namespace TrainLink.Services.Interfaces
     {
         Task<List<DtoUserResponse>> GetAllUsersAsync(int? id);
         Task<DtoUserResponse?> CreateUserAsync(User user);
-        Task<DtoUserResponse?> UpdateUserAsync(User user);
+        Task<DtoUserResponse?> UpdateUserAsync(int id, DtoUpdateUser user, string UpdatedBy);
         Task<bool> DeleteUserAsync(User id);
     }
 }

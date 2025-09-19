@@ -28,60 +28,51 @@ namespace TrainLink.Controllers
         {
             var result = await _userService.GetAllUsersAsync(id);
             if (result == null || result.Count == 0)
-                return NotFound(ValidationMessages.USER_NOT_FOUND);
+                return NotFound(new { message = ValidationMessages.USER_NOT_FOUND });
             return Ok(result);
-        }        
+        }
 
         [HttpPost(ApiRoutes.POST_USER)]
         public async Task<IActionResult> CreateUser([FromBody] DtoCreateUser dto)
         {
             var createdBy = User.Identity?.Name;
-            if (createdBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            if (createdBy == null) return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var newUser = new User
             {
                 Name = dto.Name,
                 Username = dto.Username,
                 Mobile = dto.Mobile,
                 RoleId = dto.RoleId,
-                PasswordHash = dto.Password, 
+                PasswordHash = dto.Password,
                 CreatedBy = createdBy
             };
             var result = await _userService.CreateUserAsync(newUser);
-            if (result == null) return BadRequest(ValidationMessages.USER_CREATION_FAILED);
+            if (result == null) return BadRequest(new { message = ValidationMessages.USERNAME_ALREADY_EXISTS });
             return Ok(result);
         }
 
         [HttpPut(ApiRoutes.PUT_USER)]
-        public async Task<IActionResult> UpdateUser([FromBody] DtoCreateUser dto, [FromRoute] int id)
+        public async Task<IActionResult> UpdateUser([FromBody] DtoUpdateUser dto, [FromRoute] int id)
         {
             var updatedBy = User.Identity?.Name;
-            if (updatedBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
-            var entity = new User
-            {
-                Id = id,
-                Username = dto.Username,
-                UpdatedBy = updatedBy,
-                Name = dto.Name,
-                Mobile = dto.Mobile,
-                RoleId = dto.RoleId,
-                PasswordHash = dto.Password,
-            };
-            var result = await _userService.UpdateUserAsync(entity);
-            if (result == null) return NotFound(ValidationMessages.USER_NOT_FOUND);
+            if (updatedBy == null) return Unauthorized(new { message= ValidationMessages.UNAUTHORIZED_USER });
+            var result = await _userService.UpdateUserAsync(id, dto, updatedBy);
+            if (updatedBy == null) return NotFound(new { message = ValidationMessages.USER_NOT_FOUND });
             return Ok(result);
         }
+
 
         [HttpDelete(ApiRoutes.DELETE_USER)]
         public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
-            if (id <= 0) return BadRequest(ValidationMessages.INVALID_USER_ID);
+            if (id <= 0) return BadRequest(new { message= ValidationMessages.INVALID_USER_ID });
             var updatedBy = User.Identity?.Name;
-            if (updatedBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
-            var user = new User { UpdatedBy=updatedBy, Id=id };
+            if (updatedBy == null) return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
+            var user = new User { UpdatedBy = updatedBy, Id = id };
             var result = await _userService.DeleteUserAsync(user);
             if (result == false)
-                return NotFound(ValidationMessages.USER_NOT_FOUND);
-            return Ok(new { message= ValidationMessages.USER_DELETED_SUCCESSFULLY });
+                return NotFound(new { message = ValidationMessages.USER_NOT_FOUND });
+            return Ok(new { message = ValidationMessages.USER_DELETED_SUCCESSFULLY });
         }
 
         // ------------------ ROLES ------------------
@@ -97,20 +88,20 @@ namespace TrainLink.Controllers
         public async Task<IActionResult> CreateRole([FromBody] DtoRole dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
-                return BadRequest(ValidationMessages.ROLE_REQUIRED);
+                return BadRequest(new {message= ValidationMessages.ROLE_REQUIRED });
             var result = await _roleService.CreateRoleAsync(dto.Name);
-            if(result==null) return BadRequest(ValidationMessages.ROLE_CREATION_FAILED);
+            if (result == null) return BadRequest(new { message = ValidationMessages.ROLE_CREATION_FAILED });
             return Ok(result);
         }
-        
+
         [HttpPut(ApiRoutes.PUT_ROLE)]
         public async Task<IActionResult> UpdateRole([FromBody] DtoRole dto, [FromRoute] int id)
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
-                return BadRequest(ValidationMessages.ROLE_REQUIRED);
+                return BadRequest(new {message= ValidationMessages.ROLE_REQUIRED });
             var role = new Role { Id = id, Name = dto.Name };
             var result = await _roleService.UpdateRoleAsync(role);
-            if (result == null) return NotFound(ValidationMessages.ROLE_NOT_FOUND);
+            if (result == null) return NotFound(new { message = ValidationMessages.ROLE_NOT_FOUND });
             return Ok(result);
         }
     }

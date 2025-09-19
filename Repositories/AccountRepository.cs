@@ -18,8 +18,8 @@ namespace TrainLink.Repositories
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
-            using var conn = _context.CreateConnection();
-            var result = await conn.QuerySingleOrDefaultAsync<User>(
+            using var conn =  _context.CreateConnection();
+            var result = await conn.QuerySingleOrDefaultAsync<User?>(
                 "GetUserByUsername",
                 new { Username = username },
                 commandType: CommandType.StoredProcedure
