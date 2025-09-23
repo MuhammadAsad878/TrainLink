@@ -14,5 +14,7 @@
         public const string VALID_URL = @"^(https?|ftp)://([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}(:\d+)?(/.*)?$";
         // Mobile: optional +, 8–15 digits, no leading zero
         public const string MOBILE_PATTERN = @"^\+?[1-9][0-9]{7,14}$";
+        /// Allows only alphabets (A–Z, a–z). No digits, spaces, or special characters.
+        public const string AlphabetsOnlyRegex = "^[A-Za-z]+$";
     }
 }

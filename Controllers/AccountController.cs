@@ -3,7 +3,7 @@ using TrainLink.Dtos;
 using TrainLink.Constants;
 using TrainLink.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using TrainLink.Models;
+using FluentValidation;
 
 namespace TrainLink.Controllers
 {
@@ -13,15 +13,20 @@ namespace TrainLink.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        public AccountController(IAccountService accountService)
+        private readonly IValidator<LoginRequest> _loginValidator;
+        private readonly IValidator<DtoChangePassword> _changePasswordValidator;
+        public AccountController(IAccountService accountService, IValidator<LoginRequest> loginValidator, IValidator<DtoChangePassword> changePasswordValidator )
         {
             _accountService = accountService;
+            _loginValidator = loginValidator;
+            _changePasswordValidator = changePasswordValidator;
         }
 
         [HttpPost(ApiRoutes.LOGIN)]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginRequest dtoLogin)
         {
+            await _loginValidator.ValidateAndThrowAsync(dtoLogin);
             var response = await _accountService.ValidateLoginAsync(dtoLogin);
             if (response is null) return Unauthorized(new {message= ValidationMessages.INVALID_LOGIN_CREDENTIALS });
             return Ok(response);
@@ -30,18 +35,19 @@ namespace TrainLink.Controllers
         [HttpPost(ApiRoutes.CHANGE_PASSWORD)]
         public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
         {
+            await _changePasswordValidator.ValidateAndThrowAsync(dto);
             var response = await _accountService.ChangePassword(dto);
             if (response is null || response == false)
-                return BadRequest(ValidationMessages.INVALID_LOGIN_CREDENTIALS);
-            return Ok(ValidationMessages.PASSWORD_CHANGE_SUCCESS);
+                return BadRequest(new { message = ValidationMessages.INVALID_LOGIN_CREDENTIALS });
+            return Ok(new { message = ValidationMessages.PASSWORD_CHANGE_SUCCESS });
         }
 
         [HttpPost(ApiRoutes.LOGOUT)]
         public IActionResult Logout()
         {
             var authToken = Request.Headers["Authorization"].ToString();
-            if (authToken is null) return BadRequest(ValidationMessages.LOGIN_FIRST);
-            return Ok(ValidationMessages.LOGOUT_SUCCESS);
+            if (string.IsNullOrEmpty(authToken)) return BadRequest(new { message = ValidationMessages.LOGIN_FIRST });
+            return Ok(new { message = ValidationMessages.LOGOUT_SUCCESS });
         }
     }
 }

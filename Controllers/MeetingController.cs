@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Any;
 using TrainLink.Constants;
 using TrainLink.Dtos;
 using TrainLink.Entities;
@@ -15,18 +15,27 @@ namespace TrainLink.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingService _service;
-        public MeetingController(IMeetingService service)
+        private readonly IValidator<DtoMeetingSlotRequest> _slotRequestValidator;
+        private readonly IValidator<DtoMeetingLinkRequest> _linkRequestValidator;
+        public MeetingController(
+            IMeetingService service,
+            IValidator<DtoMeetingSlotRequest> slotRequestValidator,
+            IValidator<DtoMeetingLinkRequest> linkRequestValidator)
         {
             _service = service;
+            _slotRequestValidator = slotRequestValidator;
+            _linkRequestValidator = linkRequestValidator;
         }
 
         // Slot Routes
-        [HttpGet(ApiRoutes.GET_SLOTS)]       
+        [HttpGet(ApiRoutes.GET_SLOTS)]
         public async Task<IActionResult> GetMeetingSlots([FromRoute] int? id)
         {
             var result = await _service.GetMeetingSlotsAsync(id);
             if (result == null || result.Count == 0)
-                return NotFound(ValidationMessages.MEETING_SLOT_NOT_FOUND);
+            {
+                return NotFound(new { message = ValidationMessages.MEETING_SLOT_NOT_FOUND });
+            }
             return Ok(result);
         }
 
@@ -34,11 +43,14 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> CreateMeetingSlot([FromBody] DtoMeetingSlotRequest newSlot)
         {
+            await _slotRequestValidator.ValidateAndThrowAsync(newSlot);
             var createdBy = User.Identity?.Name;
-            if (createdBy == null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            if (createdBy == null)
+                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var slot = new EntityMeetingSlot { SlotTime = newSlot.SlotTime, CreatedBy = createdBy };
             var result = await _service.CreateMeetingSlotAsync(slot);
-            if (result == null) return NotFound(ValidationMessages.FAILED_TO_CREATE_MEETING_SLOT);
+            if (result == null)
+                return NotFound(new { message = ValidationMessages.FAILED_TO_CREATE_MEETING_SLOT });
             return Ok(result);
         }
 
@@ -46,9 +58,12 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> UpdateMeetingSlot([FromBody] DtoMeetingSlotRequest oldSlot, [FromRoute] int id)
         {
-            if (id <= 0) return BadRequest(ValidationMessages.INVALID_MEETING_SLOT_ID);
+            await _slotRequestValidator.ValidateAndThrowAsync(oldSlot);
+            if (id <= 0)
+                return BadRequest(new { message = ValidationMessages.INVALID_MEETING_SLOT_ID });
             var updatedByUser = User.Identity?.Name;
-            if (updatedByUser is null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            if (updatedByUser is null)
+                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var updateSlot = new EntityMeetingSlot
             {
                 SlotId = id,
@@ -56,7 +71,8 @@ namespace TrainLink.Controllers
                 UpdatedBy = updatedByUser
             };
             var result = await _service.UpdateMeetingSlotAsync(updateSlot);
-            if (result == null) return NotFound(ValidationMessages.MEETING_SLOT_NOT_FOUND);
+            if (result == null)
+                return NotFound(new { message = ValidationMessages.MEETING_SLOT_NOT_FOUND });
             return Ok(result);
         }
 
@@ -64,23 +80,27 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> DeleteMeetingSlot([FromRoute] int? id)
         {
-            if (id <= 0) return BadRequest(ValidationMessages.MEETING_SLOT_ID_INVALID);
+            if (id <= 0)
+                return BadRequest(new { message = ValidationMessages.MEETING_SLOT_ID_INVALID });
             var updatedBy = User.Identity?.Name;
             if (updatedBy == null)
-                return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var slot = new EntityMeetingSlot { SlotId = id, UpdatedBy = updatedBy };
             var result = await _service.DeleteMeetingSlotAsync(slot);
-            if (result == true) return Ok(ValidationMessages.MEETING_SLOT_DELETED_SUCCESSFULLY);
-            return NotFound(ValidationMessages.MEETING_SLOT_NOT_FOUND);
+            if (result == true)
+                return Ok(new { message = ValidationMessages.MEETING_SLOT_DELETED_SUCCESSFULLY });
+            return NotFound(new { message = ValidationMessages.MEETING_SLOT_NOT_FOUND });
         }
 
         // Link Routes
         [HttpGet(ApiRoutes.GET_LINKS)]
         public async Task<IActionResult> GetLinks([FromRoute] int? id)
         {
-            if (id <= 0) return BadRequest(ValidationMessages.MEETING_LINK_ID_INVALID);
+            if (id <= 0)
+                return BadRequest(new { message = ValidationMessages.MEETING_LINK_ID_INVALID });
             var result = await _service.GetMeetingLinksAsync(id);
-            if (result == null) return NotFound(ValidationMessages.MEETING_LINK_NOT_FOUND);
+            if (result == null)
+                return NotFound(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
             return Ok(result);
         }
 
@@ -88,8 +108,10 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> CreateLink([FromBody] DtoMeetingLinkRequest dto)
         {
+            await _linkRequestValidator.ValidateAndThrowAsync(dto);
             var user = User.Identity?.Name;
-            if (user is null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            if (user is null)
+                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var newLink = new MeetingLink
             {
                 SlotId = dto.SlotId,
@@ -98,7 +120,7 @@ namespace TrainLink.Controllers
             };
             var result = await _service.CreateMeetingLinkAsync(newLink);
             if (result == null)
-                return BadRequest(ValidationMessages.MEETING_SLOT_NOT_FOUND);
+                return BadRequest(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
             return Ok(result);
         }
 
@@ -106,9 +128,12 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> UpdateLink([FromBody] DtoMeetingLinkRequest dto, [FromRoute] int id)
         {
-            if (id <= 0) return BadRequest(ValidationMessages.MEETING_LINK_ID_INVALID);
+            await _linkRequestValidator.ValidateAndThrowAsync(dto);
+            if (id <= 0)
+                return BadRequest(new { message = ValidationMessages.MEETING_LINK_ID_INVALID });
             var user = User.Identity?.Name;
-            if (user is null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            if (user is null)
+                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var updateLink = new MeetingLink
             {
                 MeetingLinkId = id,
@@ -117,7 +142,8 @@ namespace TrainLink.Controllers
                 UpdatedBy = user
             };
             var result = await _service.UpdateMeetingLinkAsync(updateLink);
-            if (result == null) return NotFound(ValidationMessages.MEETING_LINK_NOT_FOUND);
+            if (result == null)
+                return NotFound(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
             return Ok(result);
         }
 
@@ -125,14 +151,16 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> DeleteLink(int id)
         {
-            if (id <= 0) return BadRequest(ValidationMessages.MEETING_LINK_ID_INVALID);
+            if (id <= 0)
+                return BadRequest(new { message = ValidationMessages.MEETING_LINK_ID_INVALID });
             var user = User.Identity?.Name;
-            if (user is null) return Unauthorized(ValidationMessages.UNAUTHORIZED_USER);
+            if (user is null)
+                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var link = new MeetingLink { MeetingLinkId = id, UpdatedBy = user };
             var isDeleted = await _service.DeleteMeetingLinkAsync(link);
-            if (isDeleted == true) return Ok(ValidationMessages.MEETING_LINK_DELETED_SUCCESSFULLY);
-            return NotFound(ValidationMessages.MEETING_LINK_NOT_FOUND);
-        }      
-       
+            if (isDeleted == true)
+                return Ok(new { message = ValidationMessages.MEETING_LINK_DELETED_SUCCESSFULLY });
+            return NotFound(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
+        }
     }
 }

@@ -89,6 +89,8 @@
         public const string ROLE_DELETED_SUCCESSFULLY = "Role deleted successfully.";
         public const string ROLE_DELETE_FAILED = "Failed to delete role.";
         public const string INVALID_ROLE_ID = "Invalid Role ID provided. It must be a positive integer.";
+        public const string ROLE_NAME_INVALID = "Role name must contain only alphabets (A–Z).";
+
 
 
         public const string NAME_REQUIRED = "Name is required.";

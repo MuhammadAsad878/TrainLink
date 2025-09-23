@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TrainLink.Constants;
 using TrainLink.Dtos;
-using TrainLink.Entities;
 using TrainLink.Models;
 using TrainLink.Services.Interfaces;
 
@@ -16,11 +15,21 @@ namespace TrainLink.Controllers
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IValidator<DtoCreateUser> _createUserValidator;
+        private readonly IValidator<DtoUpdateUser> _updateUserValidator;
+        private readonly IValidator<DtoRole> _roleValidator;
 
-        public AdminController(IUserService userService, IRoleService roleService)
+        public AdminController(IUserService userService,
+            IRoleService roleService,
+            IValidator<DtoCreateUser> createUserValidator,
+            IValidator<DtoUpdateUser> updateUserValidator,
+            IValidator<DtoRole> roleValidator)
         {
             _userService = userService;
             _roleService = roleService;
+            _createUserValidator = createUserValidator;
+            _updateUserValidator = updateUserValidator;
+            _roleValidator = roleValidator;
         }
         // ------------------ USERS ------------------
         [HttpGet(ApiRoutes.GET_USERS)]
@@ -35,6 +44,7 @@ namespace TrainLink.Controllers
         [HttpPost(ApiRoutes.POST_USER)]
         public async Task<IActionResult> CreateUser([FromBody] DtoCreateUser dto)
         {
+            await _createUserValidator.ValidateAndThrowAsync(dto);
             var createdBy = User.Identity?.Name;
             if (createdBy == null) return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var newUser = new User
@@ -54,8 +64,9 @@ namespace TrainLink.Controllers
         [HttpPut(ApiRoutes.PUT_USER)]
         public async Task<IActionResult> UpdateUser([FromBody] DtoUpdateUser dto, [FromRoute] int id)
         {
+            await _updateUserValidator.ValidateAndThrowAsync(dto);
             var updatedBy = User.Identity?.Name;
-            if (updatedBy == null) return Unauthorized(new { message= ValidationMessages.UNAUTHORIZED_USER });
+            if (updatedBy == null) return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var result = await _userService.UpdateUserAsync(id, dto, updatedBy);
             if (updatedBy == null) return NotFound(new { message = ValidationMessages.USER_NOT_FOUND });
             return Ok(result);
@@ -65,7 +76,7 @@ namespace TrainLink.Controllers
         [HttpDelete(ApiRoutes.DELETE_USER)]
         public async Task<IActionResult> DeleteUser([FromRoute] int id)
         {
-            if (id <= 0) return BadRequest(new { message= ValidationMessages.INVALID_USER_ID });
+            if (id <= 0) return BadRequest(new { message = ValidationMessages.INVALID_USER_ID });
             var updatedBy = User.Identity?.Name;
             if (updatedBy == null) return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var user = new User { UpdatedBy = updatedBy, Id = id };
@@ -87,8 +98,9 @@ namespace TrainLink.Controllers
         [HttpPost(ApiRoutes.POST_ROLE)]
         public async Task<IActionResult> CreateRole([FromBody] DtoRole dto)
         {
+            await _roleValidator.ValidateAndThrowAsync(dto);
             if (string.IsNullOrWhiteSpace(dto.Name))
-                return BadRequest(new {message= ValidationMessages.ROLE_REQUIRED });
+                return BadRequest(new { message = ValidationMessages.ROLE_REQUIRED });
             var result = await _roleService.CreateRoleAsync(dto.Name);
             if (result == null) return BadRequest(new { message = ValidationMessages.ROLE_CREATION_FAILED });
             return Ok(result);
@@ -97,8 +109,9 @@ namespace TrainLink.Controllers
         [HttpPut(ApiRoutes.PUT_ROLE)]
         public async Task<IActionResult> UpdateRole([FromBody] DtoRole dto, [FromRoute] int id)
         {
+            await _roleValidator.ValidateAndThrowAsync(dto);
             if (string.IsNullOrWhiteSpace(dto.Name))
-                return BadRequest(new {message= ValidationMessages.ROLE_REQUIRED });
+                return BadRequest(new { message = ValidationMessages.ROLE_REQUIRED });
             var role = new Role { Id = id, Name = dto.Name };
             var result = await _roleService.UpdateRoleAsync(role);
             if (result == null) return NotFound(new { message = ValidationMessages.ROLE_NOT_FOUND });
