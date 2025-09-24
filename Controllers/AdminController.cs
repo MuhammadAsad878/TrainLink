@@ -58,7 +58,7 @@ namespace TrainLink.Controllers
             };
             var result = await _userService.CreateUserAsync(newUser);
             if (result == null) return BadRequest(new { message = ValidationMessages.USERNAME_ALREADY_EXISTS });
-            return Ok(result);
+            return Ok(new { message = ValidationMessages.USER_CREATED_SUCCESSFULLY, response = result });
         }
 
         [HttpPut(ApiRoutes.PUT_USER)]
@@ -69,7 +69,7 @@ namespace TrainLink.Controllers
             if (updatedBy == null) return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
             var result = await _userService.UpdateUserAsync(id, dto, updatedBy);
             if (updatedBy == null) return NotFound(new { message = ValidationMessages.USER_NOT_FOUND });
-            return Ok(result);
+            return Ok(new {message= ValidationMessages.USER_UPDATED_SUCCESSFULLY, response = result});
         }
 
 

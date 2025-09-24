@@ -35,6 +35,7 @@
         public const string FAILED_TO_DELETE_MEETING_SLOT = "Failed to delete meeting slot.";
         public const string MEETING_SLOT_DELETED_SUCCESSFULLY = "Meeting slot deleted successfully.";
         public const string MEETING_SLOT_UPDATED_SUCCESSFULLY = "Meeting slot updated successfully.";
+        public const string MEETING_SLOT_CREATED_SUCCESSFULLY = "Meeting slot created successfully.";
         // Meeting Slot Specific
         public const string MEETING_SLOT_DATE_REQUIRED = "Meeting slot date is required.";
         public const string MEETING_SLOT_DATE_FUTURE = "Meeting slot date must be greater than the current date.";
@@ -59,6 +60,7 @@
         public const string FAILED_TO_DELETE_MEETING_LINK = "Failed to delete meeting link.";
         public const string MEETING_LINK_DELETED_SUCCESSFULLY = "Meeting link deleted successfully.";
         public const string MEETING_LINK_UPDATED_SUCCESSFULLY = "Meeting link updated successfully.";
+        public const string MEETING_LINK_CREATED_SUCCESSFULLY = "Meeting link created successfully.";
         public const string MEETING_LINK_ID_INVALID = "Meeting Link ID must be a valid positive number.";
         public const string MEETING_URL_REQUIRED = "Meeting URL is required.";
         public const string MEETING_URL_INVALID = "Meeting URL is not valid. Please provide a valid URL.";

@@ -32,8 +32,7 @@ namespace TrainLink.Controllers
         public async Task<IActionResult> GetMeetingSlots([FromRoute] int? id)
         {
             var result = await _service.GetMeetingSlotsAsync(id);
-            if (result == null || result.Count == 0)
-            {
+            if (result == null || result.Count == 0) {            
                 return NotFound(new { message = ValidationMessages.MEETING_SLOT_NOT_FOUND });
             }
             return Ok(result);
@@ -43,7 +42,8 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> CreateMeetingSlot([FromBody] DtoMeetingSlotRequest newSlot)
         {
-            await _slotRequestValidator.ValidateAndThrowAsync(newSlot);
+                await _slotRequestValidator.ValidateAndThrowAsync(newSlot);
+            
             var createdBy = User.Identity?.Name;
             if (createdBy == null)
                 return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
@@ -51,7 +51,7 @@ namespace TrainLink.Controllers
             var result = await _service.CreateMeetingSlotAsync(slot);
             if (result == null)
                 return NotFound(new { message = ValidationMessages.FAILED_TO_CREATE_MEETING_SLOT });
-            return Ok(result);
+            return Ok(new {message=ValidationMessages.MEETING_SLOT_CREATED_SUCCESSFULLY, response= result});
         }
 
         [HttpPut(ApiRoutes.PUT_SLOT)]
@@ -73,7 +73,7 @@ namespace TrainLink.Controllers
             var result = await _service.UpdateMeetingSlotAsync(updateSlot);
             if (result == null)
                 return NotFound(new { message = ValidationMessages.MEETING_SLOT_NOT_FOUND });
-            return Ok(result);
+            return Ok(new { message = ValidationMessages.MEETING_SLOT_UPDATED_SUCCESSFULLY, response = result });
         }
 
         [HttpDelete(ApiRoutes.DELETE_SLOT)]
@@ -121,7 +121,7 @@ namespace TrainLink.Controllers
             var result = await _service.CreateMeetingLinkAsync(newLink);
             if (result == null)
                 return BadRequest(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
-            return Ok(result);
+            return Ok(new { message = ValidationMessages.MEETING_LINK_CREATED_SUCCESSFULLY, response = result });
         }
 
         [HttpPut(ApiRoutes.PUT_LINK)]
@@ -144,7 +144,7 @@ namespace TrainLink.Controllers
             var result = await _service.UpdateMeetingLinkAsync(updateLink);
             if (result == null)
                 return NotFound(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
-            return Ok(result);
+            return Ok(new { message = ValidationMessages.MEETING_LINK_UPDATED_SUCCESSFULLY, response = result });
         }
 
         [HttpDelete(ApiRoutes.DELETE_LINK)]
