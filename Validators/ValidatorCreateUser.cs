@@ -29,11 +29,7 @@ namespace TrainLink.Validators
                 .Matches(RegexPatterns.MOBILE_PATTERN).WithMessage(ValidationMessages.MOBILE_INVALID);
 
             RuleFor(x => x.RoleId)
-                .GreaterThan(0).WithMessage(ValidationMessages.ROLE_REQUIRED);
-
-            //RuleFor(x => x.MembershipExpiry)
-            //    .GreaterThan(DateTime.UtcNow).When(x => x.MembershipExpiry.HasValue)
-            //    .WithMessage(ValidationMessages.MEMBERSHIP_EXPIRY_INVALID);
+                .GreaterThan(0).WithMessage(ValidationMessages.ROLE_REQUIRED);           
         }
     }
 }

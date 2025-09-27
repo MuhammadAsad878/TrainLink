@@ -49,18 +49,7 @@ namespace TrainLink.Repositories
                 SlotId = result.SlotId,
                 SlotTime = result.SlotDate.ToString(Formats.TIME_Format)
             };
-        }
-
-        public async Task<bool> DeleteMeetingLinkAsync(MeetingLink deleteLink)
-        {
-            using var conn = _dapper.CreateConnection();
-            var rowsEffected = await conn.QuerySingleAsync<int>(
-                "DeleteMeetingLink",
-                new { deleteLink.MeetingLinkId, deleteLink.UpdatedBy },
-                commandType: CommandType.StoredProcedure
-                );
-            return rowsEffected > 0;
-        }
+        }       
 
         public async Task<bool> DeleteMeetingSlotAsync(EntityMeetingSlot delSlot)
         {
@@ -172,27 +161,6 @@ namespace TrainLink.Repositories
             if (result == null) return null;
             return new DtoMeetingLinkResponse { LinkId = result.MeetingLinkId, SlotId = result.SlotId, Url = result.MeetingUrl };
         }
-
-        public async Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(EntityMeetingSlot updSlot)
-        {
-            using var conn = _dapper.CreateConnection();
-            var result = await conn.QueryFirstOrDefaultAsync<DtoMeetingSlot?>(
-                "UpdateMeetingSlot",
-                new
-                {
-                    updSlot.SlotId,
-                    updSlot.SlotDate,
-                    updSlot.UpdatedBy
-                },
-                commandType: CommandType.StoredProcedure
-            );
-            if (result == null) return null;
-            var updResult = new DtoMeetingSlotResponse
-            {
-                SlotId = result.SlotId,
-                SlotTime = result.SlotDate.ToString(Formats.TIME_Format)
-            };
-            return updResult ?? null;
-        }
+       
     }
 }

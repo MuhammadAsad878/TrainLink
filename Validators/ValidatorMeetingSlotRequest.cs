@@ -7,12 +7,12 @@ public class ValidatorMeetingSlotRequest : AbstractValidator<DtoMeetingSlotReque
     public ValidatorMeetingSlotRequest()
     {
         RuleFor(x => x.SlotTime)
-            .NotEmpty()
+            .NotNull()
             .WithMessage(ValidationMessages.SLOT_TIME_REQUIRED);
-        RuleFor(x => x.SlotTime)
-            .GreaterThan(TimeOnly.MinValue)
+        RuleFor(x => x.SlotTime)            
+            .GreaterThanOrEqualTo(TimeOnly.MinValue)
             .WithMessage(ValidationMessages.SLOT_TIME_MUST_BE_LESS)
-            .LessThan(TimeOnly.MaxValue)
+            .LessThanOrEqualTo(TimeOnly.MaxValue)
             .WithMessage(ValidationMessages.SLOT_TIME_MUST_BE_GREATER);
     }
 }

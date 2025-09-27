@@ -9,12 +9,10 @@ namespace TrainLink.Services.Interfaces
         // Slot Routes
         Task<List<DtoMeetingSlotResponse>> GetMeetingSlotsAsync(int? id);
         Task<DtoMeetingSlotResponse?> CreateMeetingSlotAsync(EntityMeetingSlot slotTime);
-        Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(EntityMeetingSlot oldMeetingSlot);
         Task<bool?> DeleteMeetingSlotAsync(EntityMeetingSlot deleteSlotId);
         // Link Routes
          Task<List<DtoMeetingLinkResponse>?> GetMeetingLinksAsync(int? id);
          Task<DtoMeetingLinkResponse?> CreateMeetingLinkAsync(MeetingLink newLink);
          Task<DtoMeetingLinkResponse?> UpdateMeetingLinkAsync(MeetingLink updateLink);
-         Task<bool> DeleteMeetingLinkAsync(MeetingLink deleteLink);
     }
 }

@@ -42,7 +42,7 @@ namespace TrainLink.Controllers
         [Authorize(Roles = nameof(UserRoles.Admin))]
         public async Task<IActionResult> CreateMeetingSlot([FromBody] DtoMeetingSlotRequest newSlot)
         {
-                await _slotRequestValidator.ValidateAndThrowAsync(newSlot);
+             await _slotRequestValidator.ValidateAndThrowAsync(newSlot);
             var createdBy = User.Identity?.Name;
             if (createdBy == null)
                 return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
@@ -51,29 +51,7 @@ namespace TrainLink.Controllers
             if (result == null)
                 return NotFound(new { message = ValidationMessages.FAILED_TO_CREATE_MEETING_SLOT });
             return Ok(new {message=ValidationMessages.MEETING_SLOT_CREATED_SUCCESSFULLY, response= result});
-        }
-
-        [HttpPut(ApiRoutes.PUT_SLOT)]
-        [Authorize(Roles = nameof(UserRoles.Admin))]
-        public async Task<IActionResult> UpdateMeetingSlot([FromBody] DtoMeetingSlotRequest oldSlot, [FromRoute] int id)
-        {
-            await _slotRequestValidator.ValidateAndThrowAsync(oldSlot);
-            if (id <= 0)
-                return BadRequest(new { message = ValidationMessages.INVALID_MEETING_SLOT_ID });
-            var updatedByUser = User.Identity?.Name;
-            if (updatedByUser is null)
-                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
-            var updateSlot = new EntityMeetingSlot
-            {
-                SlotId = id,
-                SlotTime = oldSlot.SlotTime,
-                UpdatedBy = updatedByUser
-            };
-            var result = await _service.UpdateMeetingSlotAsync(updateSlot);
-            if (result == null)
-                return NotFound(new { message = ValidationMessages.MEETING_SLOT_NOT_FOUND });
-            return Ok(new { message = ValidationMessages.MEETING_SLOT_UPDATED_SUCCESSFULLY, response = result });
-        }
+        }        
 
         [HttpDelete(ApiRoutes.DELETE_SLOT)]
         [Authorize(Roles = nameof(UserRoles.Admin))]
@@ -144,22 +122,6 @@ namespace TrainLink.Controllers
             if (result == null)
                 return NotFound(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
             return Ok(new { message = ValidationMessages.MEETING_LINK_UPDATED_SUCCESSFULLY, response = result });
-        }
-
-        [HttpDelete(ApiRoutes.DELETE_LINK)]
-        [Authorize(Roles = nameof(UserRoles.Admin))]
-        public async Task<IActionResult> DeleteLink(int id)
-        {
-            if (id <= 0)
-                return BadRequest(new { message = ValidationMessages.MEETING_LINK_ID_INVALID });
-            var user = User.Identity?.Name;
-            if (user is null)
-                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
-            var link = new MeetingLink { MeetingLinkId = id, UpdatedBy = user };
-            var isDeleted = await _service.DeleteMeetingLinkAsync(link);
-            if (isDeleted == true)
-                return Ok(new { message = ValidationMessages.MEETING_LINK_DELETED_SUCCESSFULLY });
-            return NotFound(new { message = ValidationMessages.MEETING_LINK_NOT_FOUND });
-        }
+        }        
     }
 }

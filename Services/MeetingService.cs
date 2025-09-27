@@ -26,12 +26,7 @@ namespace TrainLink.Services
         {
             return await _meetingRepository.CreateMeetingSlotAsync(newSlot);
         }
-
-        public async Task<bool> DeleteMeetingLinkAsync(MeetingLink meetingLink)
-        {
-            return await _meetingRepository.DeleteMeetingLinkAsync(meetingLink);
-        }
-
+       
         public async Task<bool?> DeleteMeetingSlotAsync(EntityMeetingSlot delSlot)
         {
             var validate = await _meetingRepository.GetMeetingSlotByIdAsync(delSlot.SlotId);
@@ -59,12 +54,6 @@ namespace TrainLink.Services
             return await _meetingRepository.UpdateMeetingLinkAsync(updateLink);
         }
 
-        public async Task<DtoMeetingSlotResponse?> UpdateMeetingSlotAsync(EntityMeetingSlot updSlot)
-        {
-            var validate = await _meetingRepository.GetMeetingSlotByIdAsync(updSlot.SlotId);
-            if (validate == null || validate.IsActive == 0) return null;
-            updSlot.SlotDate = DateOnly.FromDateTime(DateTime.Now).ToDateTime(updSlot.SlotTime);
-            return await _meetingRepository.UpdateMeetingSlotAsync(updSlot);
-        }
+      
     }
 }
