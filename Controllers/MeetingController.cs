@@ -43,7 +43,6 @@ namespace TrainLink.Controllers
         public async Task<IActionResult> CreateMeetingSlot([FromBody] DtoMeetingSlotRequest newSlot)
         {
                 await _slotRequestValidator.ValidateAndThrowAsync(newSlot);
-            
             var createdBy = User.Identity?.Name;
             if (createdBy == null)
                 return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
