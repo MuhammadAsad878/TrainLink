@@ -9,10 +9,13 @@ public class ValidatorMeetingSlotRequest : AbstractValidator<DtoMeetingSlotReque
         RuleFor(x => x.SlotTime)
             .NotNull()
             .WithMessage(ValidationMessages.SLOT_TIME_REQUIRED);
-        RuleFor(x => x.SlotTime)            
-            .GreaterThanOrEqualTo(TimeOnly.MinValue)
-            .WithMessage(ValidationMessages.SLOT_TIME_MUST_BE_LESS)
-            .LessThanOrEqualTo(TimeOnly.MaxValue)
-            .WithMessage(ValidationMessages.SLOT_TIME_MUST_BE_GREATER);
+        RuleFor(x => x.SlotTime)
+            .Must(BeParsedTime)
+            .WithMessage(ValidationMessages.SLOT_MUST_BE);        
+    }
+
+    private bool BeParsedTime(string slotTime)
+    {
+        return DateTime.TryParse(slotTime, out _);
     }
 }

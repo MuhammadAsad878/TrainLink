@@ -2,6 +2,6 @@
 {
     public class DtoMeetingSlotRequest
     {
-        public TimeOnly SlotTime { get; set; } 
+        public string SlotTime { get; set; } = string.Empty;
     }      
 }

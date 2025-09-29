@@ -43,10 +43,11 @@ namespace TrainLink.Controllers
         public async Task<IActionResult> CreateMeetingSlot([FromBody] DtoMeetingSlotRequest newSlot)
         {
              await _slotRequestValidator.ValidateAndThrowAsync(newSlot);
+            var parsedTime = TimeOnly.Parse(newSlot.SlotTime);
             var createdBy = User.Identity?.Name;
             if (createdBy == null)
                 return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
-            var slot = new EntityMeetingSlot { SlotTime = newSlot.SlotTime, CreatedBy = createdBy };
+            var slot = new EntityMeetingSlot { SlotTime = parsedTime, CreatedBy = createdBy };
             var result = await _service.CreateMeetingSlotAsync(slot);
             if (result == null)
                 return NotFound(new { message = ValidationMessages.FAILED_TO_CREATE_MEETING_SLOT });

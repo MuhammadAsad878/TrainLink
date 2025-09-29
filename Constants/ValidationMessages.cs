@@ -70,8 +70,7 @@
         public const string MUST_BE_POSITIVE = "Value must be a positive number.";
         public const string MEETING_SLOT_IS_ACTIVE_INVALID = "IsActive must be either 0 or 1.";
         public const string INVALID_MEETING_SLOT_ID = "Invalid Meeting Slot ID provided. It Must be positive integer";
-        public const string SLOT_TIME_MUST_BE_LESS = "Slot time must be less than 23:59:00 in 24 hr format.";
-        public const string SLOT_TIME_MUST_BE_GREATER = "Slot time must be greater than 00:00:00 in 24 hr format.";
+        public const string SLOT_MUST_BE = "Slot time must be valid e.g 12:30 AM";
         public const string UNAUTHORIZED_USER = "Unauthorized user. Please log in to perform this action.";
         public const string SLOT_TIME_REQUIRED = "Slot time is required.";
         // =====================
