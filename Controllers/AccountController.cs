@@ -36,6 +36,11 @@ namespace TrainLink.Controllers
         public async Task<IActionResult> ChangePassword([FromBody] DtoChangePassword dto)
         {
             await _changePasswordValidator.ValidateAndThrowAsync(dto);
+            var userName = User.Identity?.Name;
+            if (string.IsNullOrEmpty(userName)){
+                return Unauthorized(new { message = ValidationMessages.UNAUTHORIZED_USER });
+            }
+            dto.Username = userName;
             var response = await _accountService.ChangePassword(dto);
             if (response is null || response == false)
                 return BadRequest(new { message = ValidationMessages.INVALID_LOGIN_CREDENTIALS });

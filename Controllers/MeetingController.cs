@@ -83,7 +83,7 @@ namespace TrainLink.Controllers
         }
 
         [HttpPost(ApiRoutes.POST_LINK)]
-        [Authorize(Roles = nameof(UserRoles.Admin))]
+        [Authorize(Roles = $"{nameof(UserRoles.Admin)},{nameof(UserRoles.Trainer)}")]
         public async Task<IActionResult> CreateLink([FromBody] DtoMeetingLinkRequest dto)
         {
             await _linkRequestValidator.ValidateAndThrowAsync(dto);
@@ -103,7 +103,7 @@ namespace TrainLink.Controllers
         }
 
         [HttpPut(ApiRoutes.PUT_LINK)]
-        [Authorize(Roles = nameof(UserRoles.Admin))]
+        [Authorize(Roles = $"{nameof(UserRoles.Admin)},{nameof(UserRoles.Trainer)}")]
         public async Task<IActionResult> UpdateLink([FromBody] DtoMeetingLinkRequest dto, [FromRoute] int id)
         {
             await _linkRequestValidator.ValidateAndThrowAsync(dto);

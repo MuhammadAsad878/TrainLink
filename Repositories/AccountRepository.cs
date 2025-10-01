@@ -20,7 +20,7 @@ namespace TrainLink.Repositories
         {
             using var conn =  _context.CreateConnection();
             var result = await conn.QuerySingleOrDefaultAsync<User?>(
-                "GetUserByUsername",
+                "GetUserByUserName",
                 new { Username = username },
                 commandType: CommandType.StoredProcedure
                 );
