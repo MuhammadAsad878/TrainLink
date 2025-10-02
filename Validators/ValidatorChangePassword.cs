@@ -15,8 +15,9 @@ namespace TrainLink.Validators
 
             RuleFor(x => x.NewPassword)
                .NotEmpty().WithMessage(ValidationMessages.PASSWORD_REQUIRED)
-                               .Matches(RegexPatterns.PASSWORD_PATTERN).WithMessage(ValidationMessages.PASSWORD_MUST_BE)
-               .Must((model, NewPassword) => model.OldPassword != model.NewPassword).WithMessage(ValidationMessages.PASSWORD_NOT_SAME);
+               .Matches(RegexPatterns.PASSWORD_PATTERN).WithMessage(ValidationMessages.PASSWORD_MUST_BE)
+               .Must((model, NewPassword) => model.OldPassword != model.NewPassword).WithMessage(ValidationMessages.SAME_PASSWORD);
+
         }
     }
 }

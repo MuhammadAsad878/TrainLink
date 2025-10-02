@@ -42,8 +42,10 @@ namespace TrainLink.Controllers
             }
             dto.Username = userName;
             var response = await _accountService.ChangePassword(dto);
-            if (response is null || response == false)
-                return BadRequest(new { message = ValidationMessages.INVALID_LOGIN_CREDENTIALS });
+            if(response == false)
+                return BadRequest(new { message = ValidationMessages.SAME_PASSWORD });
+            if (response is null)
+                return BadRequest(new { message = ValidationMessages.INVALID_PASSWORD_CREDENTIALS });
             return Ok(new { message = ValidationMessages.PASSWORD_CHANGE_SUCCESS });
         }
 

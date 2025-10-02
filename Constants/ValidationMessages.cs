@@ -43,6 +43,8 @@
         // Authentication / Login
         // ===================== 
         public const string INVALID_LOGIN_CREDENTIALS = "Invalid username or password.";
+        public const string SAME_PASSWORD = "Both New and old Password must not be same!";
+        public const string INVALID_PASSWORD_CREDENTIALS = "Invalid password !";
         public const string LOGIN_BAD_REQUEST = "Please Enter Complete Data.";
         public const string NOT_FOUND = "Not Found.";
         public const string LOGIN_FIRST = "Login First";

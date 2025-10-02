@@ -36,6 +36,7 @@ namespace TrainLink.Services
             var ok = PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash);
             if (!ok) return null;
             dto.NewPassword = PasswordHelper.HashPassword(dto.NewPassword);
+            if (dto.NewPassword == user.PasswordHash) return false;
             return await _account.UpdatePassword(dto);
         }
 
