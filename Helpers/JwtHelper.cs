@@ -13,16 +13,14 @@ namespace TrainLink.Helpers
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            
             var role = ((UserRoles)user.RoleId).ToString();
-
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, role),
+                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-
             var token = new JwtSecurityToken(
                 issuer: config["Jwt:Issuer"],
                 audience: config["Jwt:Audience"],
@@ -31,7 +29,6 @@ namespace TrainLink.Helpers
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
-
         }
     }
-    }
+}

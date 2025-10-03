@@ -17,15 +17,15 @@ namespace TrainLink.Services
             _account = account;
             _config = config;
         }
-
+               
         public async Task<LoginResponse?> ValidateLoginAsync(LoginRequest dto)
         {
             var user = await _account.GetByUsernameAsync(dto.Username);
             if (user is null) return null;
             var ok = PasswordHelper.VerifyPassword(dto.Password, user.PasswordHash);
-            if (!ok) return null;
-            var token = JwtHelper.GenerateJwtToken(user, _config);
-            var response = new LoginResponse { Username = user.Username, Token = token };
+            if(!ok) return null;
+            var token = JwtHelper.GenerateJwtToken(user,_config);
+            var response = new LoginResponse { Username = user.Username, Token = token };             
             return response;
         }
 
@@ -36,6 +36,7 @@ namespace TrainLink.Services
             var ok = PasswordHelper.VerifyPassword(dto.OldPassword, user.PasswordHash);
             if (!ok) return null;
             dto.NewPassword = PasswordHelper.HashPassword(dto.NewPassword);
+            if (dto.NewPassword == user.PasswordHash) return false;
             return await _account.UpdatePassword(dto);
         }
 

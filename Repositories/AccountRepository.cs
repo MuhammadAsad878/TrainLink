@@ -1,7 +1,5 @@
-﻿
-using Dapper;
+﻿using Dapper;
 using System.Data;
-using TrainLink.Constants;
 using TrainLink.DataAccess;
 using TrainLink.Dtos;
 using TrainLink.Models;
@@ -20,9 +18,9 @@ namespace TrainLink.Repositories
 
         public async Task<User?> GetByUsernameAsync(string username)
         {
-            using var conn = _context.CreateConnection();
-            var result = await conn.QuerySingleOrDefaultAsync<User>(
-                "GetUserByUsername",
+            using var conn =  _context.CreateConnection();
+            var result = await conn.QuerySingleOrDefaultAsync<User?>(
+                "GetUserByUserName",
                 new { Username = username },
                 commandType: CommandType.StoredProcedure
                 );

@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using TrainLink.Dtos;
 using TrainLink.Constants;
+
 namespace TrainLink.Validators
 {
-    public class ValidatorLogin : AbstractValidator<LoginRequest>
+    public class ValidatorCreateUser : AbstractValidator<DtoCreateUser>
     {
-        public ValidatorLogin()
+        public ValidatorCreateUser()
         {
             RuleFor(x => x.Username)
                 .NotEmpty().WithMessage(ValidationMessages.USERNAME_REQUIRED)
@@ -18,7 +19,17 @@ namespace TrainLink.Validators
                 .MinimumLength(ValidationLengths.PASSWORD_MIN_LENGTH).WithMessage(ValidationMessages.PASSWORD_TOO_SHORT)
                 .MaximumLength(ValidationLengths.PASSWORD_MAX_LENGTH).WithMessage(ValidationMessages.PASSWORD_TOO_LONG)
                 .Matches(RegexPatterns.PASSWORD_PATTERN).WithMessage(ValidationMessages.PASSWORD_MUST_BE);
+
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage(ValidationMessages.NAME_REQUIRED)
+                .MaximumLength(ValidationLengths.NAME_MAX_LENGTH).WithMessage(ValidationMessages.NAME_LENGTH_LONG);
+
+            RuleFor(x => x.Mobile)
+                .NotEmpty().WithMessage(ValidationMessages.MOBILE_REQUIRED)
+                .Matches(RegexPatterns.MOBILE_PATTERN).WithMessage(ValidationMessages.MOBILE_INVALID);
+
+            RuleFor(x => x.RoleId)
+                .GreaterThan(0).WithMessage(ValidationMessages.ROLE_REQUIRED);           
         }
     }
-
 }

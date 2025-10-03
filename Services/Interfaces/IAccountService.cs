@@ -7,6 +7,7 @@ namespace TrainLink.Services.Interfaces
     {
         Task<LoginResponse?> ValidateLoginAsync(LoginRequest dtoLogin);
         Task<bool?> ChangePassword(DtoChangePassword dtoChangePassword);
-        bool? LogoutUser(string token);        
+        bool? LogoutUser(string token);
+
     }
 }
