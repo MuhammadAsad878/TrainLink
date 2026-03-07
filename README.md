@@ -6,7 +6,7 @@
 [![Deployment](https://img.shields.io/badge/Deployed_On-Vercel_%7C_MonsterASP-000000?style=for-the-badge&logo=vercel)](https://trainlink-angular.vercel.app/)
 
 > **Live Production Environment:** [https://trainlink-angular.vercel.app/](https://trainlink-angular.vercel.app/)
-> **Detailed Case Study:** [Link to your calldevs.com blog/portfolio]
+> **Portfolio and Detailed Case Study:** https://www.calldevx.tech
 
 TrainLink is a high-performance, full-stack scheduling and user management platform. Built with a decoupled architecture, it bridges the gap between trainers and members through a highly secure, role-driven ecosystem. The system leverages an optimized Angular frontend and a blazing-fast .NET Core Web API driven by raw SQL stored procedures.
 
